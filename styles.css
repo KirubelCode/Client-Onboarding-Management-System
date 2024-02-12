@@ -16,12 +16,14 @@ body {
     padding-bottom: 25px;
     border: 2px solid;
     border-radius: 10px; 
+    border-style:outset;
+   
 }
 
 
 
 .use-social {
-    border: 2px solid #007bff;
+    border: 1px solid #ddd; 
     padding: 20px; 
     border-radius: 5px; 
 }
@@ -49,6 +51,8 @@ body {
 
 .btn {
     padding: 15px 30px;
+    border-width: 2px;
+    border-style: outset;
     font-size: 18px;
     text-decoration: none;
     border-radius: 5px;
@@ -115,4 +119,31 @@ h1 {
     border-color: #000;
       
 
+}
+
+.client-details {
+
+    margin-bottom: 20px
+}
+
+.detail {
+    display: flex;
+    align-items: center;
+}
+
+.detail label {
+    width: 120px;
+    margin-right: 10px;
+}
+
+.detail input {
+ 
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
 }

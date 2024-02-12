@@ -59,3 +59,22 @@ function copyLink() {
         alert('No link to copy.');
     }
 }
+
+
+
+// Function toggles edit mode
+function toggleEditMode() {
+    var inputs = document.querySelectorAll('.client-details input');
+    inputs.forEach(function(input) {
+        input.removeAttribute('readonly');
+    });
+}
+
+// Function to redirect to Client Successful page
+function redirectToClientSuccessfulPage() {
+    window.location.href = "clientSuccessful.html";
+}
+
+// Add event listeners to buttons
+document.querySelector('.manage-btn').addEventListener('click', toggleEditMode);
+document.querySelector('.accept-btn').addEventListener('click', redirectToClientSuccessfulPage);
