@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 // OAuth 2.0 credentials
 const CLIENT_ID = '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com';
 const CLIENT_SECRET = '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';
-const REDIRECT_URI = 'http://localhost:3000/auth/google/callback'; 
+const REDIRECT_URI = 'https://client-onboarding-management-system.vercel.app/use-social.html'; 
 
 // Create an OAuth2 client
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
