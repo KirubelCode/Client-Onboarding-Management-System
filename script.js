@@ -1,15 +1,31 @@
+
 function generateLink() {
-    const clientId = '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com';
-    const redirectUri = 'https://client-onboarding-management-system.vercel.app/use-social.html';
-    const scope = 'openid profile email phone'; 
+    var selectedPlatform = document.querySelector('input[name="platform"]:checked');
 
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
+    if (selectedPlatform) {
+        var platformValue = selectedPlatform.value;
+        var generatedLink = "";
 
-    // Append the generated link as a query parameter to checkPermissions.html
-    const nextPageUrl = `checkPermissions.html?authUrl=${encodeURIComponent(authUrl)}`;
-  
-    window.location.href = nextPageUrl;
+        if (platformValue === "Google") {
+            const clientId = '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com';
+            const redirectUri = 'https://client-onboarding-management-system.vercel.app/use-social.html';
+            const scope = 'openid profile email phone'; 
+
+            generatedLink = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
+        } else if (platformValue === "tiktok") {
+            generatedLink = "https://www.tiktok.com/";
+        } else if (platformValue === "facebook") {
+            generatedLink = "https://www.facebook.com/";
+        }
+
+        // Display the generated link in the box on checkPermissions.html page
+        const linkContainer = document.getElementById('linkContainer');
+        linkContainer.textContent = generatedLink;
+    } else {
+        alert("Please select a platform.");
+    }
 }
+
 
 
 
