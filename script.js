@@ -1,4 +1,3 @@
-
 function generateLink() {
     var selectedPlatform = document.querySelector('input[name="platform"]:checked');
 
@@ -18,9 +17,8 @@ function generateLink() {
             generatedLink = "https://www.facebook.com/";
         }
 
-        // Display the generated link in the box on checkPermissions.html page
-        const linkContainer = document.getElementById('linkContainer');
-        linkContainer.textContent = generatedLink;
+        // Display the generated link
+        alert(generatedLink);
     } else {
         alert("Please select a platform.");
     }
