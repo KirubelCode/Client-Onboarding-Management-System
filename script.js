@@ -1,25 +1,15 @@
+
+
 function generateLink() {
-    var selectedPlatform = document.querySelector('input[name="platform"]:checked');
-
-    if (selectedPlatform) {
-        var platformValue = selectedPlatform.value;
-        var generatedLink = "";
-
-        if (platformValue === "instagram") {
-            generatedLink = "https://www.instagram.com/";
-        } else if (platformValue === "tiktok") {
-            generatedLink = "https://www.tiktok.com/";
-        } else if (platformValue === "facebook") {
-            generatedLink = "https://www.facebook.com/";
-        }
-
-        sessionStorage.setItem('selectedLink', generatedLink); // Store selected link in session
-
-        window.location.href = "checkPermissions.html"; // Redirect to checkPermissions.html
-    } else {
-        alert("Please select a platform.");
-    }
-}
+    const clientId = '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com';
+    const redirectUri = 'google.com';
+    const scope = 'openid profile email phone'; 
+  
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
+  
+    window.location.href = authUrl;
+  }
+  
 
 
 
