@@ -2,7 +2,7 @@
 
 function generateLink() {
     const clientId = '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com';
-    const redirectUri = 'google.com';
+    const redirectUri = 'https://client-onboarding-management-system.vercel.app/use-social.html';
     const scope = 'openid profile email phone'; 
   
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
