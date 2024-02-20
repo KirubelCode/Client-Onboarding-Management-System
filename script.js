@@ -1,3 +1,4 @@
+
 function generateLink() {
     var selectedPlatform = document.querySelector('input[name="platform"]:checked');
 
@@ -17,12 +18,15 @@ function generateLink() {
             generatedLink = "https://www.facebook.com/";
         }
 
-        // Display the generated link
-        alert(generatedLink);
+        // Set the generated link as the content of the linkContainer element
+        document.getElementById("linkContainer").textContent = generatedLink;
     } else {
         alert("Please select a platform.");
     }
 }
+
+
+
 
 
 
