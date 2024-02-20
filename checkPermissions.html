@@ -10,11 +10,21 @@
 <body>
     <div class="container">
         <h1 class="title">Checking Permissions</h1>
-        <div id="linkContainer" class = "generated-link"></div>
+        <div id="linkContainer" class="generated-link"></div>
         <br><br>
         <button onclick="copyLink()" class="btn">Copy Link</button>
         <a href="retrievedClient.html" class="btn">NEXT PAGE TEST</a>
-        
     </div>
+
+    <script>
+        // Retrieve the generated link from the query parameter
+        const params = new URLSearchParams(window.location.search);
+        const authUrl = params.get('authUrl');
+        
+        // Display the generated link
+        const linkContainer = document.getElementById('linkContainer');
+        linkContainer.textContent = authUrl ? authUrl : 'No link available.';
+    </script>
 </body>
 </html>
+
