@@ -1,12 +1,13 @@
 {
   "name": "client-system",
   "version": "1.0.0",
-  "description": "hold client data",
+  "description": "Retrieve clients data",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-"dependencies": {
+  "dependencies": {
     "express": "^4.17.1",
     "googleapis": "^71.0.0"
+  }
 }
