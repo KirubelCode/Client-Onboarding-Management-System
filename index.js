@@ -8,7 +8,7 @@ app.use(express.static('public'));
 
 // Define route to serve onboard.html when accessing the root path
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'onboard.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Start the server
