@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check Permissions</title>
-    <script src="script.js" defer></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,20 +12,17 @@
         <div id="linkContainer" class="generated-link"></div>
         <br><br>
         <button onclick="copyLink()" class="btn">Copy Link</button>
-        <a href="retrievedClient.html" class="btn">NEXT PAGE TEST</a>
     </div>
 
     <script>
-        // Retrieve the generated link from the query parameter
-        const params = new URLSearchParams(window.location.search);
-        const authUrl = params.get('authUrl');
-        
-        // Display the generated link
-        const linkContainer = document.getElementById('linkContainer');
-        linkContainer.textContent = authUrl ? authUrl : 'No link available.';
-    </script>
- 
+        // Retrieve the generated link from the URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const generatedLink = urlParams.get('link');
 
+        // Set the generated link as the content of the linkContainer element
+        document.getElementById("linkContainer").textContent = generatedLink;
+    </script>
 </body>
 </html>
+
 
