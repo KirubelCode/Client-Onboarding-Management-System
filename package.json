@@ -1,7 +1,7 @@
 {
-  "name": "your-project-name",
+  "name": "client-system",
   "version": "1.0.0",
-  "description": "Your project description",
+  "description": "hold client data",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
