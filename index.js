@@ -11,6 +11,10 @@ app.get('/index.js', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.js'));
 });
 
+app.get('/onboard.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'onboard.html'));
+});
+
 // Define route to serve onboard.html when accessing the root path
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
