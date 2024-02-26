@@ -6,11 +6,13 @@ const PORT = process.env.PORT || 3000;
 // Middleware to serve static files (HTML, CSS, JS) from the public directory
 app.use(express.static('public'));
 
+// Ignore requests for favicon.ico
+app.get('/favicon.ico', (req, res) => res.status(204));
+
 // Route to serve index.js
 app.get('/index.js', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.js'));
 });
-
 
 // Define route to serve onboard.html when accessing the root path
 app.get('/', (req, res) => {
@@ -21,7 +23,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-
 
