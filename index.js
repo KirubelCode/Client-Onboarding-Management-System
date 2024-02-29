@@ -19,6 +19,9 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Routes for authRoutes and getUserInfo
+app.use('/routes', 'authRoutes.js');
+app.use('/routes', 'getGoogleUserInfo.js');
 
 
 // Start the server

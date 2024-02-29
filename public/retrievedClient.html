@@ -10,9 +10,26 @@
     <div id="clientDetails"></div>
     <script>
         fetch('/get-user-details')
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                document.getElementById('clientDetails').innerText = data;
+                // Parse the user details from the JSON response
+                const { names, emailAddresses, phoneNumbers } = data;
+                
+                // Create HTML elements to display the user details
+                const detailsContainer = document.getElementById('clientDetails');
+                const nameElement = document.createElement('p');
+                const emailElement = document.createElement('p');
+                const phoneElement = document.createElement('p');
+                
+                // Set the text content of the HTML elements
+                nameElement.textContent = `Name: ${names[0].displayName}`;
+                emailElement.textContent = `Email: ${emailAddresses[0].value}`;
+                phoneElement.textContent = `Phone: ${phoneNumbers[0].value}`;
+                
+                // Append the HTML elements to the details container
+                detailsContainer.appendChild(nameElement);
+                detailsContainer.appendChild(emailElement);
+                detailsContainer.appendChild(phoneElement);
             })
             .catch(error => console.error('Error retrieving client details:', error));
     </script>
