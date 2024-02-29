@@ -49,7 +49,6 @@ app.get('/auth/google', (req, res) => {
   res.redirect(authUrl);
 });
 
-// Route to handle the OAuth 2.0 callback
 app.get('/oauth2callback', async (req, res) => {
   try {
     // Get the authorization code from the query parameters
@@ -59,15 +58,20 @@ app.get('/oauth2callback', async (req, res) => {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
 
-    // Optionally, you can store the tokens or use them to make requests to Google APIs
-    
-    // Send the access token back to the client
-    res.send(tokens.access_token);
+    // Store the access token in localStorage
+    localStorage.setItem('accessToken', tokens.access_token);
+
+    // Optionally, you can store the refresh token as well
+    localStorage.setItem('refreshToken', tokens.refresh_token);
+
+    // Redirect to retrievedClient page
+    res.redirect('/retrievedClient.html');
   } catch (error) {
     console.error('Error exchanging authorization code for tokens:', error);
     res.status(500).send('Error exchanging authorization code for tokens.');
   }
 });
+
 
 
 // Create an instance of the People API
@@ -102,5 +106,5 @@ app.get('/get-user-details', async (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server issss running on http://localhost:${PORT}`);
+  console.log(`Server iss running on http://localhost:${PORT}`);
 });
