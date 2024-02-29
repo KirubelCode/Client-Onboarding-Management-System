@@ -30,26 +30,6 @@ app.get('/auth/google', (req, res) => {
   res.redirect(authUrl);
 });
 
-app.get('/oauth2callback', async (req, res) => {
-  try {
-    // Get the authorization code from the query parameters
-    const code = req.query.code;
-    console.log('Authorization code:', code);
-
-    // Exchange authorization code for refresh and access tokens
-    const { tokens } = await oauth2Client.getToken(code);
-    console.log('Tokens:', tokens);
-
-    oauth2Client.setCredentials(tokens);
-
-    // Redirect to retrievedClient page
-    res.redirect('/retrievedClient.html');
-  } catch (error) {
-    console.error('Error exchanging authorization code for tokens:', error);
-    res.status(500).send('Error exchanging authorization code for tokens.');
-  }
-});
-
 // Create an instance of the People API
 const people = google.people({ version: 'v1', auth: oauth2Client });
 
@@ -63,7 +43,7 @@ app.get('/get-user-details', async (req, res) => {
     });
 
     const user = response.data;
-    res.json(user); // Send the raw JSON data as response
+    res.json(user); // Send the user details as JSON response
   } catch (error) {
     console.error('Error retrieving user details:', error);
     res.status(500).send('Error retrieving user details');
@@ -74,4 +54,3 @@ app.get('/get-user-details', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
