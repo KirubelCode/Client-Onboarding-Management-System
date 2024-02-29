@@ -36,8 +36,11 @@
                     alert("Failed to copy link to clipboard. Please try again.");
                 });
         }
+
+        // Function to reload the page every 10 seconds
+        setInterval(() => {
+            location.reload();
+        }, 10000); // 10000 milliseconds = 10 seconds
     </script>
 </body>
 </html>
-
-
