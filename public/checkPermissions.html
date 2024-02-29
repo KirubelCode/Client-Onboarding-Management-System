@@ -42,21 +42,5 @@
                 });
         }
 
-        // Function to fetch user details from the server
-        function getUserDetails() {
-            fetch('/get-user-details') // Fetch user details from this route
-                .then(response => response.json())
-                .then(data => {
-                    const userDataDiv = document.getElementById('userData');
-                    userDataDiv.innerHTML = JSON.stringify(data, null, 2); // Display raw JSON data
-                })
-                .catch(error => console.error('Error retrieving user details:', error));
-        }
-
-        // Refresh page every 5 seconds
-        setInterval(() => {
-            location.reload();
-        }, 15000); // 5000 milliseconds = 5 seconds
-    </script>
-</body>
+        </script>
 </html>

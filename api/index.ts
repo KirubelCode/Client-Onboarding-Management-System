@@ -1,46 +1,82 @@
-const express = require('express');
+const http = require('http');
+const https = require('https');
+const url = require('url');
 const { google } = require('googleapis');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const oauth2Client = new google.auth.OAuth2(
+  '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com',
+  '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',
+  'http://localhost:3000/oauth2callback'
+);
 
-// OAuth 2.0 credentials
-const CLIENT_ID = 'YOUR_CLIENT_ID';
-const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
-const REDIRECT_URI = 'http://localhost:3000/oauth2callback'; // Corrected redirect URL
 
-// Create an OAuth2 client
-const oauth2Client = new google.auth.OAuth2({
-  clientId: CLIENT_ID,
-  clientSecret: CLIENT_SECRET,
-  redirectUri: REDIRECT_URI,
+const scopes = ['https://www.googleapis.com/auth/userinfo.email'];
+
+const authorizationUrl = oauth2Client.generateAuthUrl({
+  access_type: 'offline',
+  scope: scopes,
+  include_granted_scopes: true
 });
 
-// Route to handle the OAuth 2.0 callback
-app.get('/oauth2callback', async (req, res) => {
-  try {
-    console.log('OAuth 2.0 callback initiated');
+let userCredential = null as { access_token?: string } | null;
 
-    // Retrieve the authorization code from the query parameters
-    const code = req.query.code;
-    console.log('Authorization code:', code);
+async function main() {
+  const server = http.createServer(async function (req, res) {
+    if (req.url == '/') {
+      res.writeHead(301, { "Location": authorizationUrl });
+    }
 
-    // Exchange authorization code for refresh and access tokens
-    const { tokens } = await oauth2Client.getToken(code);
-    console.log('Tokens:', tokens);
+    if (req.url.startsWith('/oauth2callback')) {
+      let q = url.parse(req.url, true).query;
+      if (q.error) {
+        console.error('Error: ' + q.error);
+      } else {
+        let { tokens } = await oauth2Client.getToken(q.code);
+        oauth2Client.setCredentials(tokens);
+        userCredential = tokens;
 
-    // Set credentials for OAuth2 client
-    oauth2Client.setCredentials(tokens);
+        // Handle API requests or further actions here
+      }
+    }
 
-    // Redirect to success page or perform further actions
-    res.redirect('/authroised.html');
-  } catch (error) {
-    console.error('Error exchanging authorization code for tokens:', error);
-    res.status(500).send('Error exchanging authorization code for tokens.');
-  }
-});
+    if (req.url == '/revoke') {
+      let postData = '';
+      if (userCredential && userCredential.access_token) {
+        postData = 'token=' + userCredential.access_token;
+      } else {
+        console.error('Access token is not available.');
+        // Handle the error appropriately
+      }
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+      let postOptions = {
+        host: 'oauth2.googleapis.com',
+        port: '443',
+        path: '/revoke',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': Buffer.byteLength(postData)
+        }
+      };
+
+      const postReq = https.request(postOptions, function (res) {
+        res.setEncoding('utf8');
+        res.on('data', d => {
+          console.log('Response: ' + d);
+        });
+      });
+
+      postReq.on('error', error => {
+        console.error(error);
+      });
+
+      postReq.write(postData);
+      postReq.end();
+    }
+
+    res.end();
+  }).listen(3000);
+}
+
+main().catch(console.error);
+
