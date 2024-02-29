@@ -56,11 +56,18 @@ app.get('/oauth2callback', async (req, res) => {
     const code = req.query.code;
 
     // Exchange authorization code for refresh and access tokens
-    const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
+const { tokens } = await oauth2Client.getToken(code);
+oauth2Client.setCredentials(tokens);
 
-    // Optionally, you can store the tokens or use them to make requests to Google APIs
-    
+// Store the access token in localStorage
+localStorage.setItem('accessToken', tokens.access_token);
+
+// Optionally, you can store the refresh token as well
+localStorage.setItem('refreshToken', tokens.refresh_token);
+
+// Redirect to retrievedClient page
+window.location.href = 'retrievedClient.html';
+
     // Send the access token back to the client
     res.send(tokens.access_token);
   } catch (error) {
