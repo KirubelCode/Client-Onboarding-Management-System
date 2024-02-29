@@ -18,8 +18,6 @@ const oauth2Client = new google.auth.OAuth2({
   redirectUri: REDIRECT_URI,
 });
 
-// Read the success.html file
-const successHTML = fs.readFileSync(path.join('public', 'authroised.html'), 'utf8');
 
 // Route to handle the OAuth 2.0 callback
 app.get('/oauth2callback', async (req, res) => {
@@ -30,8 +28,8 @@ app.get('/oauth2callback', async (req, res) => {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
 
-    // Redirect to success.html after obtaining the access token
-    res.send(successHTML);
+    // Redirect to auth.html after obtaining the access token
+    res.redirect('/authroised.html');
   } catch (error) {
     console.error('Error exchanging authorization code for tokens:', error);
     res.status(500).send('Error exchanging authorization code for tokens.');
