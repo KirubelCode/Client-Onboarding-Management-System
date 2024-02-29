@@ -6,14 +6,14 @@ const { google } = require('googleapis');
 const oauth2Client = new google.auth.OAuth2(
   '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com',
   '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',
-  'https://clientsystemproject2024.vercel.app/ouath2callback'
+  'https://clientsystemproject2024.vercel.app/oauth2callback'
 );
 
 let userCredential = null;
 
 // Generate the OAuth 2.0 authorization URL
-const clientId = 'YOUR_CLIENT_ID';
-const redirectUri = 'YOUR_REDIRECT_URI';
+const clientId = '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com';
+const redirectUri = 'https://clientsystemproject2024.vercel.app/oauth2callback';
 const scope = 'openid profile email phone'; 
 
 const generatedLink = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
