@@ -37,12 +37,16 @@
                 });
         }
 
-        // Check if access tokens are present
-        const accessToken = localStorage.getItem('accessToken');
-        if (accessToken) {
-            // Redirect to retrievedClient page
-            window.location.href = 'retrievedClient.html';
-        }
+       // Check if access token is present
+const accessToken = localStorage.getItem('accessToken');
+if (accessToken) {
+    // Redirect to retrievedClient page
+    window.location.href = 'retrievedClient.html';
+} else {
+    // If access token is not present, initiate OAuth flow
+    window.location.href = '/auth/google';
+}
+
     </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-
 const express = require('express');
 const { google } = require('googleapis');
 
@@ -50,20 +49,26 @@ app.get('/auth/google', (req, res) => {
   res.redirect(authUrl);
 });
 
-// Route to handle OAuth2 callback
-app.get('/auth/google/callback', async (req, res) => {
-  const { code } = req.query;
+// Route to handle the OAuth 2.0 callback
+app.get('/oauth2callback', async (req, res) => {
   try {
+    // Get the authorization code from the query parameters
+    const code = req.query.code;
+
+    // Exchange authorization code for refresh and access tokens
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-    // Use tokens to make requests to Google APIs
-    // Example: const userData = await google.oauth2('v2').userinfo.get({ auth: oAuth2Client });
-    res.send('Authentication successful!');
+
+    // Optionally, you can store the tokens or use them to make requests to Google APIs
+    
+    // Send the access token back to the client
+    res.send(tokens.access_token);
   } catch (error) {
-    console.error('Error authenticating with Google:', error);
-    res.status(500).send('Error authenticating with Google');
+    console.error('Error exchanging authorization code for tokens:', error);
+    res.status(500).send('Error exchanging authorization code for tokens.');
   }
 });
+
 
 // Create an instance of the People API
 const people = google.people({ version: 'v1', auth: oauth2Client });
@@ -99,5 +104,3 @@ app.get('/get-user-details', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-module.exports = app;
