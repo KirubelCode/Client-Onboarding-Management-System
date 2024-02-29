@@ -1,4 +1,5 @@
 const http = require('http');
+const https = require('https');
 const url = require('url');
 const { google } = require('googleapis');
 
@@ -10,18 +11,24 @@ const redirectUri = 'https://clientsystemproject2024.vercel.app/oauth2callback';
 const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
 
 async function main() {
-  const scope = ['openid', 'profile', 'email', 'phone']; // Scopes as an array
+  // Define the required scopes
+  const scopes = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/user.phonenumbers.read'
+  ];
 
   // Generate the OAuth 2.0 authorization URL
   const authUrl = oauth2Client.generateAuthUrl({
-    access_type: 'offline', // 'online' (default) or 'offline' (gets refresh_token)
-    scope: scope.join(' '), // Scopes need to be space-separated string
+    access_type: 'offline',
+    scope: scopes.join(' '),
+    include_granted_scopes: true
   });
 
   const server = http.createServer(async function (req, res) {
     if (req.url === '/') {
       // Redirect user to Google's OAuth 2.0 server
-      res.writeHead(302, { Location: authUrl }); // Use 302 for temporary redirect
+      res.writeHead(302, { Location: authUrl });
       res.end();
     }
 
