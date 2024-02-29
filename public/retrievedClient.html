@@ -9,5 +9,26 @@
     <h1>Retrieved Client Page</h1>
     <div id="clientDetails"></div>
     
+
 </body>
+<script>
+// Function to copy the generated link to the clipboard
+function copyLink() {
+    const linkToCopy = document.getElementById("linkContainer").textContent;
+
+    // Copy the link to the clipboard
+    navigator.clipboard.writeText(linkToCopy)
+        .then(() => {
+            alert("Link copied to clipboard: " + linkToCopy);
+        })
+        .catch((error) => {
+            console.error("Error copying link to clipboard:", error);
+            alert("Failed to copy link to clipboard. Please try again.");
+        });
+
+    // Redirect to retrievedClient.html after consent
+    window.location.href = "retrievedClient.html";
+}
+</script>
+
 </html>
