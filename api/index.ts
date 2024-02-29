@@ -19,7 +19,7 @@ const oauth2Client = new google.auth.OAuth2({
 });
 
 // Read the success.html file
-const successHTML = fs.readFileSync(path.join(__dirname, 'success.html'), 'utf8');
+const successHTML = fs.readFileSync(path.join(__dirname, 'authroised.html'), 'utf8');
 
 // Route to handle the OAuth 2.0 callback
 app.get('/oauth2callback', async (req, res) => {
