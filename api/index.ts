@@ -20,10 +20,15 @@ const oauth2Client = new google.auth.OAuth2({
 // Route to handle the OAuth 2.0 callback
 app.get('/oauth2callback', async (req, res) => {
   try {
+    console.log('OAuth 2.0 callback initiated');
+
     const code = req.query.code;
+    console.log('Authorization code:', code);
 
     // Exchange authorization code for refresh and access tokens
     const { tokens } = await oauth2Client.getToken(code);
+    console.log('Tokens:', tokens);
+
     oauth2Client.setCredentials(tokens);
 
     // Redirect to auth.html after obtaining the access token
@@ -33,6 +38,7 @@ app.get('/oauth2callback', async (req, res) => {
     res.status(500).send('Error exchanging authorization code for tokens.');
   }
 });
+
 
 // Start the server
 app.listen(PORT, () => {
