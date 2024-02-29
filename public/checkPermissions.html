@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,18 +14,11 @@
         <button onclick="copyLink()" class="btn">Copy Link</button>
         <br><br>
         <button onclick="getUserDetails()" class="btn">Get User Details</button>
+        <br><br>
+        <div id="userData"></div> <!-- Display user data here -->
     </div>
 
     <script>
-
-        
-        // Retrieve the generated link from the URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const generatedLink = urlParams.get('link');
-
-        // Set the generated link as the content of the linkContainer element
-        document.getElementById("linkContainer").textContent = generatedLink;
-
         // Function to copy the generated link to the clipboard
         function copyLink() {
             const linkToCopy = document.getElementById("linkContainer").textContent;
@@ -41,8 +34,9 @@
                 });
         }
 
+        // Function to fetch user details from the server
         function getUserDetails() {
-            fetch('/get-user-details')
+            fetch('/get-user-details') // Fetch user details from this route
                 .then(response => response.json())
                 .then(data => {
                     const userDataDiv = document.getElementById('userData');
@@ -50,10 +44,11 @@
                 })
                 .catch(error => console.error('Error retrieving user details:', error));
         }
+
         // Refresh page every 5 seconds
         setInterval(() => {
             location.reload();
         }, 5000); // 5000 milliseconds = 5 seconds
     </script>
 </body>
-</html>>
+</html>
