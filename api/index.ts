@@ -1,7 +1,5 @@
 const express = require('express');
 const { google } = require('googleapis');
-const fs = require('fs');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 // OAuth 2.0 credentials
 const CLIENT_ID = '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com';
 const CLIENT_SECRET = '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';
-const REDIRECT_URI = 'http://localhost:3000/oauth2callback'; // Redirect URL to success.html
+const REDIRECT_URI = 'http://localhost:3000/oauth2callback'; // Corrected redirect URL
 
 // Create an OAuth2 client
 const oauth2Client = new google.auth.OAuth2({
