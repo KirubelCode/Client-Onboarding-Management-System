@@ -9,7 +9,6 @@ const oauth2Client = new google.auth.OAuth2(
   'http://localhost:3000/oauth2callback'
 );
 
-
 const scopes = ['https://www.googleapis.com/auth/userinfo.email'];
 
 const authorizationUrl = oauth2Client.generateAuthUrl({
@@ -31,11 +30,19 @@ async function main() {
       if (q.error) {
         console.error('Error: ' + q.error);
       } else {
-        let { tokens } = await oauth2Client.getToken(q.code);
-        oauth2Client.setCredentials(tokens);
-        userCredential = tokens;
+        try {
+          let { tokens } = await oauth2Client.getToken(q.code);
+          oauth2Client.setCredentials(tokens);
+          userCredential = tokens;
 
-        // Handle API requests or further actions here
+          // Handle further actions after successful authentication
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end('Authentication successful! You can close this tab now.');
+        } catch (error) {
+          console.error('Error exchanging authorization code for tokens:', error);
+          res.writeHead(500, { 'Content-Type': 'text/html' });
+          res.end('Error exchanging authorization code for tokens.');
+        }
       }
     }
 
@@ -79,4 +86,3 @@ async function main() {
 }
 
 main().catch(console.error);
-
