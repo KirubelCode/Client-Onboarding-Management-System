@@ -53,9 +53,12 @@ app.get('/oauth2callback', async (req, res) => {
   try {
     // Get the authorization code from the query parameters
     const code = req.query.code;
+    console.log('Authorization code:', code);
 
     // Exchange authorization code for refresh and access tokens
     const { tokens } = await oauth2Client.getToken(code);
+    console.log('Tokens:', tokens);
+
     oauth2Client.setCredentials(tokens);
 
     // Store the access token in localStorage
@@ -71,6 +74,7 @@ app.get('/oauth2callback', async (req, res) => {
     res.status(500).send('Error exchanging authorization code for tokens.');
   }
 });
+
 
 
 
