@@ -16,25 +16,6 @@ const oauth2Client = new google.auth.OAuth2({
   redirectUri: REDIRECT_URI,
 });
 
-// Route to handle the OAuth 2.0 callback
-app.get('/oauth2callback', async (req, res) => {
-  try {
-    // Get the authorization code from the query parameters
-    const code = req.query.code;
-
-    // Exchange authorization code for refresh and access tokens
-    const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
-
-    // Optionally, you can store the tokens or use them to make requests to Google APIs
-
-    res.send('Authorization successful! Tokens obtained.');
-  } catch (error) {
-    console.error('Error exchanging authorization code for tokens:', error);
-    res.status(500).send('Error exchanging authorization code for tokens.');
-  }
-});
-
 // Get authorization URL
 const authUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline',
@@ -61,12 +42,6 @@ app.get('/oauth2callback', async (req, res) => {
 
     oauth2Client.setCredentials(tokens);
 
-    // Store the access token in localStorage
-    localStorage.setItem('accessToken', tokens.access_token);
-
-    // Optionally, you can store the refresh token as well
-    localStorage.setItem('refreshToken', tokens.refresh_token);
-
     // Redirect to retrievedClient page
     res.redirect('/retrievedClient.html');
   } catch (error) {
@@ -74,9 +49,6 @@ app.get('/oauth2callback', async (req, res) => {
     res.status(500).send('Error exchanging authorization code for tokens.');
   }
 });
-
-
-
 
 // Create an instance of the People API
 const people = google.people({ version: 'v1', auth: oauth2Client });
@@ -91,17 +63,7 @@ app.get('/get-user-details', async (req, res) => {
     });
 
     const user = response.data;
-    const { names, emailAddresses, phoneNumbers } = user;
-
-    // Prepare the user details to send back as JSON response
-    const userDetails = {
-      name: names[0].displayName,
-      email: emailAddresses[0].value,
-      phone: phoneNumbers[0].value
-    };
-
-    // Send the user details as JSON response
-    res.json(userDetails);
+    res.json(user); // Send the raw JSON data as response
   } catch (error) {
     console.error('Error retrieving user details:', error);
     res.status(500).send('Error retrieving user details');
@@ -110,5 +72,6 @@ app.get('/get-user-details', async (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server iss running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
+

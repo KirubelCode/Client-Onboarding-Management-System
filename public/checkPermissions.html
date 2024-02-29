@@ -9,44 +9,26 @@
 <body>
     <div class="container">
         <h1 class="title">Checking Permissions</h1>
-        <div id="linkContainer" class="generated-link"></div>
+        <div id="userData"></div>
         <br><br>
-        <button onclick="copyLink()" class="btn">Copy Link</button>
+        <button onclick="getUserDetails()" class="btn">Get User Details</button>
     </div>
 
     <script>
-        // Retrieve the generated link from the URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const generatedLink = urlParams.get('link');
-
-        // Set the generated link as the content of the linkContainer element
-        document.getElementById("linkContainer").textContent = generatedLink;
-
-        // Function to copy the generated link to the clipboard
-        function copyLink() {
-            const linkToCopy = document.getElementById("linkContainer").textContent;
-
-            // Copy the link to the clipboard
-            navigator.clipboard.writeText(linkToCopy)
-                .then(() => {
-                    alert("Link copied to clipboard: " + linkToCopy);
+        function getUserDetails() {
+            fetch('/get-user-details')
+                .then(response => response.json())
+                .then(data => {
+                    const userDataDiv = document.getElementById('userData');
+                    userDataDiv.innerHTML = JSON.stringify(data, null, 2); // Display raw JSON data
                 })
-                .catch((error) => {
-                    console.error("Error copying link to clipboard:", error);
-                    alert("Failed to copy link to clipboard. Please try again.");
-                });
+                .catch(error => console.error('Error retrieving user details:', error));
         }
 
-       // Check if access token is present
-const accessToken = localStorage.getItem('accessToken');
-if (accessToken) {
-    // Redirect to retrievedClient page
-    window.location.href = 'retrievedClient.html';
-} 
-
-setTimeout(() => {
-        location.reload();
-    }, 5000); 
+        // Refresh page every 5 seconds
+        setInterval(() => {
+            location.reload();
+        }, 5000); // 5000 milliseconds = 5 seconds
     </script>
 </body>
 </html>
