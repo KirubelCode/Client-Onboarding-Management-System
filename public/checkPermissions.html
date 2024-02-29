@@ -19,6 +19,14 @@
     </div>
 
     <script>
+
+        // Retrieve the generated link from the URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const generatedLink = urlParams.get('link');
+
+        // Set the generated link as the content of the linkContainer element
+        document.getElementById("linkContainer").textContent = generatedLink;
+        
         // Function to copy the generated link to the clipboard
         function copyLink() {
             const linkToCopy = document.getElementById("linkContainer").textContent;
