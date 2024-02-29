@@ -1,5 +1,6 @@
 const express = require('express');
 const { google } = require('googleapis');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,8 @@ const oauth2Client = new google.auth.OAuth2({
   redirectUri: REDIRECT_URI,
 });
 
+// Serve static files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Route to handle the OAuth 2.0 callback
 app.get('/oauth2callback', async (req, res) => {
@@ -31,14 +34,13 @@ app.get('/oauth2callback', async (req, res) => {
 
     oauth2Client.setCredentials(tokens);
 
-    // Redirect to auth.html after obtaining the access token
+    // Redirect to authorised.html after obtaining the access token
     res.redirect('/authroised.html');
   } catch (error) {
     console.error('Error exchanging authorization code for tokens:', error);
     res.status(500).send('Error exchanging authorization code for tokens.');
   }
 });
-
 
 // Start the server
 app.listen(PORT, () => {
