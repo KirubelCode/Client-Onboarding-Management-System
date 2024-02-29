@@ -1,13 +1,12 @@
 const express = require('express');
 const { google } = require('googleapis');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // OAuth 2.0 credentials
-const CLIENT_ID = '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com';
-const CLIENT_SECRET = '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';
+const CLIENT_ID = 'YOUR_CLIENT_ID';
+const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
 const REDIRECT_URI = 'http://localhost:3000/oauth2callback'; // Corrected redirect URL
 
 // Create an OAuth2 client
@@ -17,14 +16,12 @@ const oauth2Client = new google.auth.OAuth2({
   redirectUri: REDIRECT_URI,
 });
 
-// Serve static files from the 'public' folder
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Route to handle the OAuth 2.0 callback
 app.get('/oauth2callback', async (req, res) => {
   try {
     console.log('OAuth 2.0 callback initiated');
 
+    // Retrieve the authorization code from the query parameters
     const code = req.query.code;
     console.log('Authorization code:', code);
 
@@ -32,9 +29,10 @@ app.get('/oauth2callback', async (req, res) => {
     const { tokens } = await oauth2Client.getToken(code);
     console.log('Tokens:', tokens);
 
+    // Set credentials for OAuth2 client
     oauth2Client.setCredentials(tokens);
 
-    // Redirect to authorised.html after obtaining the access token
+    // Redirect to success page or perform further actions
     res.redirect('/authroised.html');
   } catch (error) {
     console.error('Error exchanging authorization code for tokens:', error);
