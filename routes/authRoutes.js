@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 const oauth2Client = new google.auth.OAuth2({
   clientId: '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com',
   clientSecret: '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',
-  redirectUri: 'https://clientsystemproject2024.vercel.app/oauth2callback',
+  redirectUri: 'https://clientsystemproject2024.vercel.app/authroised.html',
 });
 
 // Route to handle the OAuth 2.0 callback

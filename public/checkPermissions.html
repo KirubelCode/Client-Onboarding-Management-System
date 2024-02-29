@@ -37,10 +37,12 @@
                 });
         }
 
-        // Function to reload the page every 10 seconds
-        setInterval(() => {
-            location.reload();
-        }, 10000); // 10000 milliseconds = 10 seconds
+        // Check if access tokens are present
+        const accessToken = localStorage.getItem('accessToken');
+        if (accessToken) {
+            // Redirect to retrievedClient page
+            window.location.href = 'retrievedClient.html';
+        }
     </script>
 </body>
 </html>
