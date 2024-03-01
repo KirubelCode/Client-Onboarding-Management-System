@@ -32,6 +32,22 @@ app.get("/", (req, res) => {
   res.redirect(authUrl);
 });
 
+const bodyParser = require("body-parser");
+
+let clientData = {};
+app.use(bodyParser.json());
+
+// Endpoint to set client data
+app.post("/setClientData", (req, res) => {
+  const { email, phone, address } = req.body;
+  clientData = { email, phone, address };
+  res.json({ message: "Client data updated successfully" });
+});
+
+// Endpoint to get client data
+app.get("/getClientData", (req, res) => {
+  res.json(clientData);
+});
 
 app.get("/oauth2callback", async (req, res) => {
   try {
@@ -56,8 +72,11 @@ app.get("/oauth2callback", async (req, res) => {
     const phoneNumber = phoneNumbers && phoneNumbers.length > 0 ? phoneNumbers[0].canonicalForm : '';
     const email = emailAddresses && emailAddresses.length > 0 ? emailAddresses[0].value : '';
 
-    // Send JSON response with user profile data
-    res.json({ address, phoneNumber, email });
+    // Update client data
+    clientData = { email, phone: phoneNumber, address };
+
+    // Redirect to retrievedClient.html
+    res.redirect('/authorised.html');
 
   } catch (error) {
     console.error('Error retrieving user information:', error);

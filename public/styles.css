@@ -147,3 +147,20 @@ h1 {
     display: flex;
     justify-content: space-between;
 }
+
+.add-client {
+    padding: 15px 30px;
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 2px outset #000000;
+    color: #fff;
+    background-color: #007bff;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
+.add-client:hover {
+    background-color: #0056b3;
+}

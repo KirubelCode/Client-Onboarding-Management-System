@@ -3,28 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Client</title>
+    <title>Retrieved Client</title>
     <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
     <div class="container">
-        <h1>Add Client</h1>
+        <h1>Retrieved Client  (Reload page periodically)</h1>
         <div id="clientDetails" class="client-details">
-            <!-- Text boxes for client details (first name, last name, email, phone, address) -->
-            <form action="addClient.php" method="post">
-                <label for="fname">First Name:</label>
-                <input type="text" id="fname" name="fname"><br><br>
-                <label for="lname">Last Name:</label>
-                <input type="text" id="lname" name="lname"><br><br>
-                <label for="email">Email:</label>
-                <input type="text" id="email" name="email"><br><br>
-                <label for="phone">Phone:</label>
-                <input type="number" id="phone" name="phone"><br><br>
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address"><br><br>
-                <input type="submit" value="Add Client" class="btn add-client">
-            </form>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" value="">
+            <br><br>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" value="">
+            <br><br>
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" value="">
+            <br><br>
         </div>
+        <button class="btn add-client" onclick="addClient()">Add Client</button>
+
     </div>
+
+    <script>
+        // Function to fetch client data from server and populate text boxes
+        async function fetchClientData() {
+            try {
+                const response = await fetch('/getClientData');
+                const data = await response.json();
+
+                // Populate text boxes with client data
+                document.getElementById('email').value = data.email || '';
+                document.getElementById('phone').value = data.phone || '';
+                document.getElementById('address').value = data.address || '';
+            } catch (error) {
+                console.error('Error fetching client data:', error);
+            }
+        }
+
+        // Call fetchClientData function when the page loads
+        fetchClientData();
+    </script>
 </body>
 </html>
