@@ -2,6 +2,10 @@ const express = require("express");
 const { google } = require('googleapis');
 
 const app = express();
+const path = require('path'); // Import the path module
+
+// Serve static files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 const clientId = '527812031278-crmp1nf91o3a0i72v8kaeboo8baqrqjg.apps.googleusercontent.com';
 const clientSecret = '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';
@@ -28,6 +32,7 @@ app.get("/", (req, res) => {
   res.redirect(authUrl);
 });
 
+
 app.get("/oauth2callback", async (req, res) => {
   try {
     const { code } = req.query;
@@ -51,7 +56,9 @@ app.get("/oauth2callback", async (req, res) => {
     const phoneNumber = phoneNumbers && phoneNumbers.length > 0 ? phoneNumbers[0].canonicalForm : '';
     const email = emailAddresses && emailAddresses.length > 0 ? emailAddresses[0].value : '';
 
-    res.json({ address, phoneNumber, email });
+    // Redirect to the authorised.html page in the public folder
+    res.redirect("/authorised.html");
+
   } catch (error) {
     console.error('Error retrieving user information:', error);
     res.status(500).json({ error: 'Internal Server Error' });

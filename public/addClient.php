@@ -11,12 +11,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO clientInfo (Fname, Lname, Phone, Address, Email) VALUES ('$fname', '$lname', '$phone', '$address', '$email')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "";
+        header("Location: clientInserted.html"); // Redirect to success page
+        exit();
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
