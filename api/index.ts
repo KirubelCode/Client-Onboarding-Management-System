@@ -2,6 +2,9 @@ const http = require('http');
 const https = require('https');
 const url = require('url');
 const { google } = require('googleapis');
+const express = require("express");
+const app = express();
+
 
 // OAuth 2.0 credentials
 const clientId = '527812031278-0ciq72bf110usrbtarv06o0vo8qbr8nf.apps.googleusercontent.com';
@@ -65,4 +68,12 @@ async function main() {
   console.log('Server running at http://localhost:80/');
 }
 
+
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
+app.listen(3000, () => console.log("Server ready on port 3000."));
+
+module.exports = app;
+
 main().catch(console.error);
+
