@@ -39,6 +39,7 @@ app.get("/oauth2callback", async (req, res) => {
     const phone = phoneNumbers && phoneNumbers.length > 0 ? phoneNumbers[0].value : '';
 
     // Process retrieved user information
+    res.redirect('/authorised')
     res.json({ name, email, phone });
   } catch (error) {
     console.error('Error retrieving user information:', error);
