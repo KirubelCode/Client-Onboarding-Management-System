@@ -2,19 +2,20 @@
   "name": "client-system",
   "version": "1.0.0",
   "description": "Retrieve clients data",
-  "main": "index.js", 
+  "main": "index.js",
   "engines": {
     "node": "14.x"
   },
   "scripts": {
-    "start": "vercel dev", 
+    "start": "node index.js",
     "build": "tsc", 
-    "deploy": "vercel --prod" 
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "express": "^4.18.3"
   },
   "devDependencies": {
-    "@vercel/node": "^2.4.0" 
+    "@vercel/node": "^2.4.0",
+    "typescript": "^4.5.4"
   }
 }
