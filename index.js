@@ -48,7 +48,7 @@ app.get("/oauth2callback", async (req, res) => {
     const people = google.people({ version: 'v1', auth: oauth2ClientWithTokens });
     const profile = await people.people.get({
       resourceName: 'people/me',
-      personFields: 'addresses,phoneNumbers,emailAddresses'
+      personFields: 'addresses,phoneNumbers,emailAddresses' // Include addresses, phoneNumbers, and emailAddresses
     });
 
     const { addresses, phoneNumbers, emailAddresses } = profile.data;
@@ -56,8 +56,8 @@ app.get("/oauth2callback", async (req, res) => {
     const phoneNumber = phoneNumbers && phoneNumbers.length > 0 ? phoneNumbers[0].canonicalForm : '';
     const email = emailAddresses && emailAddresses.length > 0 ? emailAddresses[0].value : '';
 
-    // Redirect to the authorised.html page in the public folder
-    res.redirect("/authorised.html");
+    // Send JSON response with user profile data
+    res.json({ address, phoneNumber, email });
 
   } catch (error) {
     console.error('Error retrieving user information:', error);
