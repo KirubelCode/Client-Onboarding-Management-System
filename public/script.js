@@ -7,7 +7,7 @@ function generateLink() {
 
         if (platformValue === "Google") {
             const clientId = '527812031278-crmp1nf91o3a0i72v8kaeboo8baqrqjg.apps.googleusercontent.com';
-            const redirectUri = 'https://clientsystemproject2024.vercel.app/oauth2callback';
+            const redirectUri = 'http://localhost:3000/oauth2callback';
             const scope = 'openid profile email phone'; 
 
             generatedLink = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
