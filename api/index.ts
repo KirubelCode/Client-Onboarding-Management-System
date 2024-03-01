@@ -44,6 +44,7 @@ async function main() {
       } else {
         try {
           const { tokens } = await oauth2Client.getToken(query.code);
+          console.log('Received tokens:', tokens);
           oauth2Client.setCredentials(tokens);
 
           // Redirect to authorised.html after successful consent
