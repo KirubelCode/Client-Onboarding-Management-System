@@ -4,16 +4,14 @@
   "description": "Retrieve clients data",
   "main": "index.js",
   "engines": {
-
-"node": "14.x"  
-},
+    "node": "14.x"
+  },
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.18.3"
   },
-  "devDependencies": {},
   "keywords": [],
   "author": "",
   "license": "ISC"
