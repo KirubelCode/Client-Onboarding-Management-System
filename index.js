@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const clientId = '527812031278-crmp1nf91o3a0i72v8kaeboo8baqrqjg.apps.googleusercontent.com';
 const clientSecret = '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';
-const redirectUri = 'http://localhost:3000/oauth2callback';
+const redirectUri = 'https://clientsystemproject2024.vercel.app/oauth2callback';
 
 const oauth2Client = new google.auth.OAuth2({
   clientId: clientId,
