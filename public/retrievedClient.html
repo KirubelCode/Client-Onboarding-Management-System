@@ -8,8 +8,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Retrieved Client  (Reload page periodically)</h1>
+        <h1>Retrieved Client (Reload page periodically)</h1>
         <div id="clientDetails" class="client-details">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" value="">
+            <br><br>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" value="">
+            <br><br>
             <label for="email">Email:</label>
             <input type="text" id="email" name="email" value="">
             <br><br>
@@ -25,23 +31,57 @@
     </div>
 
     <script>
-        // Function to fetch client data from server and populate text boxes
-        async function fetchClientData() {
-            try {
-                const response = await fetch('/getClientData');
-                const data = await response.json();
+        
+        // Function to populate text boxes with client data
+        async function populateClientData() {
+    try {
+        const response = await fetch('http://localhost:3000/getClientData');
+        const data = await response.json();
 
-                // Populate text boxes with client data
-                document.getElementById('email').value = data.email || '';
-                document.getElementById('phone').value = data.phone || '';
-                document.getElementById('address').value = data.address || '';
-            } catch (error) {
-                console.error('Error fetching client data:', error);
+        // Populate text boxes with client data
+        document.getElementById('firstName').value = data.firstName || '';
+        document.getElementById('lastName').value = data.lastName || '';
+        document.getElementById('email').value = data.email || '';
+        document.getElementById('phone').value = data.phone || '';
+        document.getElementById('address').value = data.address || '';
+    } catch (error) {
+        console.error('Error fetching client data:', error);
+    }
+}
+
+populateClientData();
+
+    
+        // Function to add client
+        async function addClient() {
+            // Populate text boxes with client data first
+            await populateClientData();
+    
+            // Get the populated values from text boxes
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+    
+            // Send a POST request to addClient.php
+            const response = await fetch('http://localhost:3000/addClient.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ firstName, lastName, email, phone, address })
+            });
+    
+            if (response.ok) {
+                // If the response is OK, display a success message
+                alert('Client inserted successfully!');
+            } else {
+                // If there was an error, display the error message
+                const errorMessage = await response.text();
+                alert('Error inserting client: ' + errorMessage);
             }
         }
-
-        // Call fetchClientData function when the page loads
-        fetchClientData();
     </script>
 </body>
 </html>

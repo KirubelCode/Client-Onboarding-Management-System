@@ -2,22 +2,23 @@
 include 'db.inc.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
+    $firstName = $_POST['firstName']; 
+    $lastName = $_POST['lastName']; 
     $phone = $_POST['phone'];
     $address = $_POST['address'];
     $email = $_POST['email'];
 
-    $sql = "INSERT INTO clientInfo (Fname, Lname, Phone, Address, Email) VALUES ('$fname', '$lname', '$phone', '$address', '$email')";
+    $sql = "INSERT INTO clientInfo (firstName, lastName, phone, address, email) VALUES ('$firstName', '$lastName', '$phone', '$address', '$email')";
 
     if ($conn->query($sql) === TRUE) {
-        header("Location: clientInserted.html"); // Redirect to success page
-        exit();
+     
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
 ?>
+
+
 
 
 <!DOCTYPE html>

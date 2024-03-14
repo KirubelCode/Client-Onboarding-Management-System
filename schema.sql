@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS ClientsDB;
+
+USE ClientsDB;
+
+CREATE TABLE IF NOT EXISTS clientInfo (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(255),
+    lastName VARCHAR(255),
+    email VARCHAR(255),
+    phone VARCHAR(20),
+    address VARCHAR(255)
+);
