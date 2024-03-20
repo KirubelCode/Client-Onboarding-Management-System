@@ -1,5 +1,5 @@
 <?php
-$servername = "localhost";
+$servername = "localhost:3000";
 $username = "C00260396";
 $password = "SetuCarlow2024";
 $dbname = "ClientsDB";
@@ -11,4 +11,5 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
 ?>
