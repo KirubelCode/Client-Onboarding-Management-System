@@ -5,79 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Clients</title>
     <style>
-             body {
+        body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5; /* Background color */
+            background-color: #f5f5f5; 
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
 
-        .client-container {
+        .container {
             max-width: 800px;
-            margin: 0 auto; 
-            padding: 20px; 
-            padding-bottom: 25px;
-            border: 2px solid;
-            border-radius: 10px; 
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 2px;
+            border-radius: 50px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-style: outset;
-            background-color: #fff; /* Background color */
+            margin-left: 15%;
         }
 
-        .client-box {
-            overflow-x: auto;
+        .client-dropdown {
+            margin-bottom: 20px;
         }
 
-        .header-row {
-            display: flex;
-            background-color: #f0f0f0;
-            padding: 10px 0;
+        .client-details {
+            margin-bottom: 20px;
+        }
+
+        .client-details label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
             font-weight: bold;
         }
 
-        .client-header, .client-detail {
-            flex: 1;
+        .client-details input {
+            width: calc(100% - 22px); 
             padding: 10px;
-            border-right: 1px solid #ccc; /* Add right border */
-            border-bottom: 1px solid #ccc; /* Add bottom border */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
         }
 
-        .client-row {
+        .client-details input:focus {
+            border-color: #007bff; /* Highlight border color on focus */
+            outline: none;
+        }
+
+        .button-container {
             display: flex;
-            border-bottom: 1px solid #ccc; /* Add bottom border */
+            justify-content: space-between;
+            margin-top: 20px;
         }
 
-        .client-detail {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            border-left: 1px solid #ccc; 
+        .button-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
 
-        .client-info {
-            overflow-y: auto; /* Enable vertical scrolling */
-            max-height: 400px; /* Limit maximum height to enable scrolling */
+        .button-container button:hover {
+            background-color: #007bff;
+            color: #fff;
+            margin-right: 10px;
+            
         }
-        
-     
+
+        .back-button {
+    position: fixed;
+    bottom: 20px; 
+    left: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
+}
+
+
+
     </style>
 </head>
 <body>
-    <div class="client-container">
+    <div class="container">
         <h1>Manage Clients</h1>
-        <div class="client-box">
-            <div class="header-row">
-                <div class="client-header">ID</div>
-                <div class="client-header">First Name</div>
-                <div class="client-header">Last Name</div>
-                <div class="client-header">Email</div>
-                <div class="client-header">Phone</div>
-                <div class="client-header">Address</div>
-            </div>
-            <div class="client-info">
+        <div class="client-dropdown">
+            <label for="clientSelect">Select Client:</label>
+            <select id="clientSelect" onchange="selectClient()">
+                <option value="">Select a client</option>
+                <!-- PHP code to populate dropdown options -->
                 <?php
                 $servername = "localhost";
                 $username = "C00260396";
@@ -93,29 +119,151 @@
                 }
 
                 // Query to retrieve all client data
-                $sql = "SELECT * FROM clientInfo";
+                $sql = "SELECT ID, firstName, lastName FROM clientInfo";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     // Output data of each row
                     while($row = $result->fetch_assoc()) {
-                        echo '<div class="client-row">';
-                        echo '<div class="client-detail">' . $row["ID"] . '</div>';
-                        echo '<div class="client-detail">' . $row["firstName"] . '</div>';
-                        echo '<div class="client-detail">' . $row["lastName"] . '</div>';
-                        echo '<div class="client-detail">' . $row["email"] . '</div>';
-                        echo '<div class="client-detail">' . $row["phone"] . '</div>';
-                        echo '<div class="client-detail">' . $row["address"] . '</div>';
-                        echo '</div>';
+                        echo '<option value="' . $row["ID"] . '">' . $row["firstName"] . ' ' . $row["lastName"] . ' (' . $row["ID"] . ')</option>';
                     }
-                } else {
-                    echo "0 results";
                 }
-
                 $conn->close();
                 ?>
-            </div>
+            </select>
+        </div>
+        <div id="clientDetails" class="client-details">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" readonly>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" readonly>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" readonly>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" readonly>
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" readonly>
         </div>
     </div>
+    <div class="button-container">
+        <button onclick="editClient()">Edit Client</button>
+        <button onclick="updateClient()">Update Client</button>
+        <button onclick="deleteClient()">Delete Client</button>
+    </div>
+    
+
+   
+
+    <script>
+        function selectClient() {
+            const clientId = document.getElementById('clientSelect').value;
+
+            if (clientId) {
+                // Send request to server to fetch client details
+                fetch('http://localhost/project2024/public/getClientDetails.php?id=' + clientId)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Populate text boxes with client data
+                        document.getElementById('firstName').value = data.firstName || '';
+                        document.getElementById('lastName').value = data.lastName || '';
+                        document.getElementById('email').value = data.email || '';
+                        document.getElementById('phone').value = data.phone || '';
+                        document.getElementById('address').value = data.address || '';
+                    })
+                    .catch(error => {
+                        console.error('Error fetching client details:', error);
+                    });
+            } else {
+                // Clear text boxes if no client selected
+                document.getElementById('firstName').value = '';
+                document.getElementById('lastName').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('phone').value = '';
+                document.getElementById('address').value = '';
+            }
+        }
+
+        function editClient() {
+            document.getElementById('firstName').readOnly = false;
+            document.getElementById('lastName').readOnly = false;
+            document.getElementById('email').readOnly = false;
+            document.getElementById('phone').readOnly = false;
+            document.getElementById('address').readOnly = false;
+        }
+
+        function updateClient() {
+            // Get the updated values from text boxes
+            const clientId = document.getElementById('clientSelect').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+
+            // Send a POST request to updateClient.php
+            fetch('http://localhost/project2024/public/updateClient.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ clientId, firstName, lastName, email, phone, address })
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+            })
+            .catch(error => {
+                console.error('Error updating client:', error);
+            });
+        }
+
+        function deleteClient() {
+    // Get the selected client ID
+    const selectedClientId = document.getElementById('clientSelect').value;
+
+    // Check if a client is selected
+    if (selectedClientId) {
+        // Confirm deletion with the user
+        const confirmation = confirm('Are you sure you want to delete this client?');
+
+        if (confirmation) {
+            // Send a POST request to the deleteClient.php script
+            fetch('http://localhost/project2024/public/deleteClient.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'clientId=' + selectedClientId
+            })
+            .then(response => {
+                if (response.ok) {
+                    // If deletion is successful, show alert
+                    alert('Client deleted successfully');
+                } else {
+                    // If there's an error, show alert with error message
+                    response.text().then(errorMessage => {
+                        alert('Error deleting client: ' + errorMessage);
+                    });
+                }
+            })
+            .catch(error => {
+                // Handle fetch errors
+                console.error('Error deleting client:', error);
+                alert('Error deleting client');
+            });
+        }
+    } else {
+        // No client selected
+        alert('Please select a client to delete');
+    }
+}
+
+function goBack() {
+        // Go back to the previous page
+        window.history.back();
+    }
+    </script>
+    <button onclick="goBack()" class="back-button">Back</button>
 </body>
 </html>
+
