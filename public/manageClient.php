@@ -41,6 +41,7 @@
             margin-bottom: 10px;
             color: #333;
             font-weight: bold;
+            margin: 10px;
         }
 
         .client-details input {
