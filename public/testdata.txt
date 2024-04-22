@@ -1,0 +1,140 @@
+const express = require("express");
+const { google } = require('googleapis');
+const cors = require('cors');
+const session = require('express-session');
+const mysql = require('mysql');
+
+const app = express();
+const path = require('path');
+
+// Serve static files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Enable CORS for all requests
+app.use(cors());
+
+// Session configuration
+app.use(session({
+  secret: 'your_session_secret_here', // Set a secret for session cookie encryption
+  resave: false,
+  saveUninitialized: true
+}));
+
+const dbConfig = {
+  host: 'localhost', // Default host, replace if needed
+  user: 'your_default_database_user', // Replace with default database username
+  password: 'your_default_database_password', // Replace with default database password
+  database: 'your_default_database_name' // Replace with default database name
+};
+
+let db; // Declare db variable for database connection
+
+// Function to establish the database connection dynamically using user session data
+const establishDatabaseConnection = (userData) => {
+  // Create a new connection using user-specific database configuration
+  db = mysql.createConnection({
+    host: dbConfig.host,
+    user: userData.ClientUsername,
+    password: userData.ClientPassword,
+    database: userData.DatabaseName
+  });
+
+  // Connect to the database
+  db.connect((err) => {
+    if (err) {
+      console.error('Error connecting to database:', err);
+      return;
+    }
+    console.log('Connected to database');
+  });
+};
+
+const clientId = 'your_default_client_id';
+const clientSecret = 'your_default_client_secret';
+const redirectUri = 'your_default_redirect_uri';
+
+const oauth2Client = new google.auth.OAuth2({
+  clientId: clientId,
+  clientSecret: clientSecret,
+  redirectUri: redirectUri,
+});
+
+const scopes = [
+  'https://www.googleapis.com/auth/user.addresses.read',
+  'https://www.googleapis.com/auth/user.phonenumbers.read',
+  'https://www.googleapis.com/auth/userinfo.email',
+  'profile' // Include the profile scope
+];
+
+app.get("/", (req, res) => {
+  const authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: scopes.join(' '), // Join scopes with space separator
+  });
+  res.redirect(authUrl);
+});
+
+const bodyParser = require("body-parser");
+
+// Endpoint to handle user login
+app.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Query the database to retrieve all client details based on username and password
+    const sql = `SELECT * FROM ClientData WHERE ClientUsername = ? AND ClientPassword = ?`;
+    db.query(sql, [username, password], (err, results) => {
+      if (err) {
+        console.error('Error querying database:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+        return;
+      }
+
+      if (results.length === 1) {
+        // User found, retrieve client details from the database
+        const userData = results[0];
+
+        // Store user data in session
+        req.session.userData = userData;
+
+        // Establish database connection using user-specific configuration
+        establishDatabaseConnection(userData);
+
+        // Redirect to dashboard or authorized page
+        res.redirect('/dashboard');
+      } else {
+        // Invalid credentials
+        res.status(401).json({ error: 'Invalid credentials' });
+      }
+    });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint to handle user logout
+app.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      // Close the database connection
+      if (db) {
+        db.end((dbErr) => {
+          if (dbErr) {
+            console.error('Error closing database connection:', dbErr);
+          }
+          console.log('Database connection closed');
+          res.redirect('/'); // Redirect to home page after logout
+        });
+      } else {
+        res.redirect('/'); // Redirect to home page after logout
+      }
+    }
+  });
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server ready on port ${port}.`));

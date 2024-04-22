@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Menu</title>
+</head>
+<body>
+    <h1>Client Menu</h1>
+    <div id="clientMenu" style="overflow-y: scroll; height: 200px;"></div>
+
+    <script>
+        // Function to fetch client data and populate the menu
+        async function fetchAndPopulateMenu() {
+            const response = await fetch('http://localhost:3000/clients');
+            const clients = await response.json();
+
+            const menuDiv = document.getElementById('clientMenu');
+            menuDiv.innerHTML = ''; // Clear existing menu
+
+            clients.forEach(client => {
+                const clientElement = document.createElement('div');
+                clientElement.textContent = `${client.firstName} ${client.lastName}`;
+                menuDiv.appendChild(clientElement);
+            });
+        }
+
+        // Call the function to populate the menu when the page loads
+        window.onload = fetchAndPopulateMenu;
+    </script>
+</body>
+</html>

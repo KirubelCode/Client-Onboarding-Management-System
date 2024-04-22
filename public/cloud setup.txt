@@ -1,0 +1,32 @@
+ok here is the database that will be created for the business upon sign up to store all their own customers data CREATE DATABASE IF NOT EXISTS ClientsDB;
+
+USE ClientsDB;
+
+CREATE TABLE IF NOT EXISTS clientInfo (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(255),
+    lastName VARCHAR(255),
+    email VARCHAR(255),
+    phone VARCHAR(20),
+    address VARCHAR(255)
+);
+eqach  business upon sign up will need to fill in the following values for their database 
+$servername = //is what server i choose to host on
+$username = "";
+$password = "";
+$dbname = "";                                                                                                                                                                                                                    Google Account Info below                                                                                                                                                                    const clientId = '';
+const clientSecret = '';
+const redirectUri = '';                                                                                                                                                                                We need to inform user to set this up in google console what is shwon below                                                 const scopes = [
+  'https://www.googleapis.com/auth/user.addresses.read',
+  'https://www.googleapis.com/auth/user.phonenumbers.read',
+  'https://www.googleapis.com/auth/userinfo.email',
+  'profile' // Include the profile scope];                                                                                                                                               This will be decided and created(also in google console) by the client res.redirect('');
+
+
+TO DELETE/DROP USER
+DROP THEIR ROW OF DATA AND THE CORRESPONDING USER
+
+DELETE FROM clientData
+WHERE ClientUsername = 'c00260396@gmail.com';
+DROP USER 'c00260396@gmail.com'@'localhost';
+
