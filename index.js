@@ -18,51 +18,12 @@ app.use(session({
     saveUninitialized: false
 }));
 
-const { Pool } = require('pg');
-require('dotenv').config(); // Load environment variables from .env file
-
-// Database connection configuration
-const masterDbConfig = new masterDbConfig({
-    host: process.env.POSTGRES_HOST,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DATABASE,
-    port: process.env.POSTGRES_PORT || 5432, // Default PostgreSQL port
-});
-
-async function setupDatabase() {
-    const client = await masterDbConfig.connect();
-    try {
-        // Create MasterDB database if it doesn't exist
-        await client.query(`CREATE DATABASE IF NOT EXISTS ${process.env.POSTGRES_DATABASE};`);
-
-        // Use the specified database (MasterDB)
-        await client.query(`USE ${process.env.POSTGRES_DATABASE};`); // PostgreSQL doesn't use USE statement
-
-        // Create ClientData table if it doesn't exist
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS ClientData (
-                ID SERIAL PRIMARY KEY,
-                ClientUsername VARCHAR(255) NOT NULL,
-                ClientPassword VARCHAR(255) NOT NULL,
-                DatabaseName VARCHAR(255) NOT NULL,
-                GoogleClientId VARCHAR(255) NOT NULL,
-                GoogleClientSecret VARCHAR(255) NOT NULL,
-                RedirectUri VARCHAR(255) NOT NULL
-            );
-        `);
-
-        console.log('Database setup completed successfully.');
-    } catch (error) {
-        console.error('Error setting up database:', error);
-    } finally {
-        client.release();
-        await masterDbConfig.end(); // Close the pool
-    }
-}
-
-// Execute setupDatabase function
-setupDatabase();
+const masterDbConfig = {
+    host: 'localhost',
+    user: 'masterUser',
+    password: 'SetuCarlow2024',
+    database: 'MasterDB'
+};
 
 
 // Function to establish a connection to the user's database
@@ -70,11 +31,7 @@ function establishUserDbConnection(userDbConfig) {
     return mysql.createConnection(userDbConfig);
 }
 
-app.get("/", (req, res) => {
-    // Execute setupDatabase function
-setupDatabase();
-    res.redirect("/signup"); // Redirect to the "/signup" route
-});
+app.get("/", (req, res) => res.send("Express on Vercel"));
 
 // Route to render the login page
 app.get('/signup', (req, res) => {
@@ -183,15 +140,18 @@ app.get('/signup', (req, res) => {
 app.post("/signup", async (req, res) => {
     const { username, dbname, clientId, clientSecret, redirectUri, password } = req.body;
 
-    
+    // Database connection parameters for administrative tasks
+    const adminUsername = "masterUser";
+    const adminPassword = "SetuCarlow2024";
+    const adminDbname = "MasterDB";
+    const adminHost = "localhost";
 
     // Create connection to perform administrative tasks
     const adminConn = mysql.createConnection({
-        host: process.env.POSTGRES_HOST,
-        user: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        database: process.env.POSTGRES_DATABASE,
-        port: process.env.POSTGRES_PORT || 5432, // Default PostgreSQL port
+        host: adminHost,
+        user: adminUsername,
+        password: adminPassword,
+        database: adminDbname
     });
 
     // Check connection for administrative tasks
@@ -245,7 +205,7 @@ app.post("/signup", async (req, res) => {
                         }
 
                         // Grant privileges to the new user on their database
-                        const grantPrivilegesSql = `GRANT ALL PRIVILEGES ON ${newDbname}.* TO '${username}'@'process.env.POSTGRES_HOST' IDENTIFIED BY '${password}'`;
+                        const grantPrivilegesSql = `GRANT ALL PRIVILEGES ON ${newDbname}.* TO '${username}'@'localhost' IDENTIFIED BY '${password}'`;
                         adminConn.query(grantPrivilegesSql, (err, result) => {
                             if (err) {
                                 console.error('Error granting privileges:', err);
