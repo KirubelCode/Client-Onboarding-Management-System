@@ -245,7 +245,7 @@ app.post("/signup", async (req, res) => {
                         }
 
                         // Grant privileges to the new user on their database
-                        const grantPrivilegesSql = `GRANT ALL PRIVILEGES ON ${newDbname}.* TO '${username}'@'localhost' IDENTIFIED BY '${password}'`;
+                        const grantPrivilegesSql = `GRANT ALL PRIVILEGES ON ${newDbname}.* TO '${username}'@'process.env.POSTGRES_HOST' IDENTIFIED BY '${password}'`;
                         adminConn.query(grantPrivilegesSql, (err, result) => {
                             if (err) {
                                 console.error('Error granting privileges:', err);
