@@ -25,13 +25,18 @@ const masterDbConfig = {
     database: 'MasterDB'
 };
 
+// Route handler for the root endpoint
+app.get('/', (req, res) => {
+    // Redirect to the /signup endpoint
+    res.redirect('/signup');
+});
+    
+
 
 // Function to establish a connection to the user's database
 function establishUserDbConnection(userDbConfig) {
     return mysql.createConnection(userDbConfig);
 }
-
-app.get("/", (req, res) => res.send("Express on Vercel"));
 
 // Route to render the login page
 app.get('/signup', (req, res) => {
@@ -116,14 +121,14 @@ app.get('/signup', (req, res) => {
             </form>
             <button onclick="location.href='/login'">Login</button>
             <div class="note">
-                <p><strong>Note:</strong> Before signing up, please set up your Google Console account (create credentials) with a oAuth Client <BR><br>  1. Retrieve Client secret and Client Id <br><br> 2. Add the following scopes:</p>
+                <p><strong>Note:</strong> Before signing up, please set up your Google Console(gmail) account (create credentials) with a oAuth Client <BR><br>  1. Retrieve Client secret and Client Id <br><br> 2. Add the following scopes:</p>
                 <ul>
                     <li>'https://www.googleapis.com/auth/user.addresses.read'</li>
                     <li>'https://www.googleapis.com/auth/user.phonenumbers.read'</li>
                     <li>'https://www.googleapis.com/auth/userinfo.email'</li>
                     <li>'profile' (Include the profile scope and people api)</li>
                 </ul>
-                <p> Use this redirect URI http://localhost:3000/authorised-client in your google account and here.<p>
+                <p> Use this redirect URI https://9f1e7c76ece206c6.ngrok.app/oauth2callback in your google account and here.<p>
                 <p>Also, configure the google console Redirect URI to match the one used in this signup page.</p>
             </div>
         </div>
@@ -428,45 +433,71 @@ app.get('/dashboard', (req, res) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Client Management System</title>
         <style>
-        .container {
-            max-width: 800px;
-            margin: 0 auto; 
-            padding: 20px; 
-            padding-bottom: 25px;
-            border: 2px solid;
-            border-radius: 10px; 
-            border-style:outset;
-           
-        }
+
         
-        .btn {
-            padding: 15px 30px;
-            border-width: 2px;
-            border-style: outset;
-            font-size: 18px;
-            text-decoration: none;
-            border-radius: 5px;
-            border-color: #000000;
-            color: #fff;
-            background-color: #007bff;
-            transition: background-color 0.3s, color 0.3s;
-            cursor: pointer;
-            
-        }
-        
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }        
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px outset #000000;
+    border-radius: 10px;
+    background-color: #ffffff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 18px;
+    text-decoration: none;
+    border: 2px outset #000000;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #007bff;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive adjustments for smaller screens (up to 600px) */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px; /* Increase padding for smaller screens */
+    }
+
+    .btn {
+        padding: 12px 24px; /* Adjust button padding */
+        font-size: 16px; /* Adjust button font size */
+    }
+}
+
+/* Responsive adjustments for even smaller screens (up to 400px) */
+@media (max-width: 400px) {
+    .container {
+        padding: 10px; /* Adjust padding for very small screens */
+    }
+
+    .btn {
+        padding: 10px 20px; /* Further adjust button padding */
+        font-size: 14px; /* Further reduce button font size */
+    }
+}    
         </style>
     </head>
     <body>
@@ -501,7 +532,8 @@ app.get('/onboard', (req, res) => {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Onboard Client</title>
-    <style> body {
+    <style>        
+    body {
         font-family: Arial, sans-serif;
         background-color: #f5f5f5;
         margin: 0;
@@ -514,33 +546,56 @@ app.get('/onboard', (req, res) => {
     
     .container {
         max-width: 800px;
-        margin: 0 auto; 
-        padding: 20px; 
-        padding-bottom: 25px;
-        border: 2px solid;
-        border-radius: 10px; 
-        border-style:outset;
-       
+        margin: 0 auto;
+        padding: 20px;
+        border: 2px outset #000000;
+        border-radius: 10px;
+        background-color: #ffffff;
+        text-align: center;
+        box-sizing: border-box;
     }
     
     .btn {
+        display: inline-block;
         padding: 15px 30px;
-        border-width: 2px;
-        border-style: outset;
         font-size: 18px;
         text-decoration: none;
+        border: 2px outset #000000;
         border-radius: 5px;
-        border-color: #000000;
         color: #fff;
         background-color: #007bff;
         transition: background-color 0.3s, color 0.3s;
+        margin: 10px;
         cursor: pointer;
-        
     }
-
+    
     .btn:hover {
         background-color: #0056b3;
     }
+    
+    /* Responsive adjustments for smaller screens (up to 600px) */
+    @media (max-width: 600px) {
+        .container {
+            padding: 15px; /* Increase padding for smaller screens */
+        }
+    
+        .btn {
+            padding: 12px 24px; /* Adjust button padding */
+            font-size: 16px; /* Adjust button font size */
+        }
+    }
+    
+    /* Responsive adjustments for even smaller screens (up to 400px) */
+    @media (max-width: 400px) {
+        .container {
+            padding: 10px; /* Adjust padding for very small screens */
+        }
+    
+        .btn {
+            padding: 10px 20px; /* Further adjust button padding */
+            font-size: 14px; /* Further reduce button font size */
+        }
+    }    
 
     .index-button {
         display: flex;
@@ -612,33 +667,70 @@ app.get('/use-social', (req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Retrieve Details</title>
             <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f5f5f5;
-                margin: 0;
-                padding: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-            }
-            
-            .container {
-                max-width: 800px;
-                margin: 0 auto; 
-                padding: 20px; 
-                padding-bottom: 25px;
-                border: 2px solid;
-                border-radius: 10px; 
-                border-style:outset;
-               
-            }
-        
-            .use-social {
-                border: 1px solid #ddd; 
-                padding: 20px; 
-                border-radius: 5px; 
-            }
+                   
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px outset #000000;
+    border-radius: 10px;
+    background-color: #ffffff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 18px;
+    text-decoration: none;
+    border: 2px outset #000000;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #007bff;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive adjustments for smaller screens (up to 600px) */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px; /* Increase padding for smaller screens */
+    }
+
+    .btn {
+        padding: 12px 24px; /* Adjust button padding */
+        font-size: 16px; /* Adjust button font size */
+    }
+}
+
+/* Responsive adjustments for even smaller screens (up to 400px) */
+@media (max-width: 400px) {
+    .container {
+        padding: 10px; /* Adjust padding for very small screens */
+    }
+
+    .btn {
+        padding: 10px 20px; /* Further adjust button padding */
+        font-size: 14px; /* Further reduce button font size */
+    }
+}    
         
             .title {
                 font-size: 24px;
@@ -660,20 +752,7 @@ app.get('/use-social', (req, res) => {
                 margin-bottom: 10px;
             }
             
-            .btn {
-                padding: 15px 30px;
-                border-width: 2px;
-                border-style: outset;
-                font-size: 18px;
-                text-decoration: none;
-                border-radius: 5px;
-                border-color: #000000;
-                color: #fff;
-                background-color: #007bff;
-                transition: background-color 0.3s, color 0.3s;
-                cursor: pointer;
-                
-            }
+            
 
             .back-button {
                 position: fixed;
@@ -756,27 +835,70 @@ app.get('/manually-input', (req, res) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Add Client</title>
        <style>
-       body {
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-    
+              
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px outset #000000;
+    border-radius: 10px;
+    background-color: #ffffff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 18px;
+    text-decoration: none;
+    border: 2px outset #000000;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #007bff;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive adjustments for smaller screens (up to 600px) */
+@media (max-width: 600px) {
     .container {
-        max-width: 800px;
-        margin: 0 auto; 
-        padding: 20px; 
-        padding-bottom: 25px;
-        border: 2px solid;
-        border-radius: 10px; 
-        border-style:outset;
-       
+        padding: 15px; /* Increase padding for smaller screens */
     }
+
+    .btn {
+        padding: 12px 24px; /* Adjust button padding */
+        font-size: 16px; /* Adjust button font size */
+    }
+}
+
+/* Responsive adjustments for even smaller screens (up to 400px) */
+@media (max-width: 400px) {
+    .container {
+        padding: 10px; /* Adjust padding for very small screens */
+    }
+
+    .btn {
+        padding: 10px 20px; /* Further adjust button padding */
+        font-size: 14px; /* Further reduce button font size */
+    }
+}    
 
     .title {
         font-size: 24px;
@@ -790,20 +912,7 @@ app.get('/manually-input', (req, res) => {
         align-items: flex-start; /* Left align form items */
     }
 
-    .btn {
-        padding: 15px 30px;
-        border-width: 2px;
-        border-style: outset;
-        font-size: 18px;
-        text-decoration: none;
-        border-radius: 5px;
-        border-color: #000000;
-        color: #fff;
-        background-color: #007bff;
-        transition: background-color 0.3s, color 0.3s;
-        cursor: pointer;
-        
-    }
+    
     
     .index-button {
         display: flex;
@@ -884,31 +993,71 @@ app.get('/check-permission', (req, res) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Check Permissions</title>
         <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto; 
-            padding: 20px; 
-            padding-bottom: 25px;
-            border: 2px solid;
-            border-radius: 10px; 
-            border-style:outset;
-           
-        }
-        
-        
-        
-        .
+              
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px outset #000000;
+    border-radius: 10px;
+    background-color: #ffffff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 18px;
+    text-decoration: none;
+    border: 2px outset #000000;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #007bff;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive adjustments for smaller screens (up to 600px) */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px; /* Increase padding for smaller screens */
+    }
+
+    .btn {
+        padding: 12px 24px; /* Adjust button padding */
+        font-size: 16px; /* Adjust button font size */
+    }
+}
+
+/* Responsive adjustments for even smaller screens (up to 400px) */
+@media (max-width: 400px) {
+    .container {
+        padding: 10px; /* Adjust padding for very small screens */
+    }
+
+    .btn {
+        padding: 10px 20px; /* Further adjust button padding */
+        font-size: 14px; /* Further reduce button font size */
+    }
+}    
+
         .title {
             font-size: 24px;
             margin-bottom: 30px;
@@ -916,26 +1065,10 @@ app.get('/check-permission', (req, res) => {
         }
         
      
-        .btn {
-            padding: 15px 30px;
-            border-width: 2px;
-            border-style: outset;
-            font-size: 18px;
-            text-decoration: none;
-            border-radius: 5px;
-            border-color: #000000;
-            color: #fff;
-            background-color: #007bff;
-            transition: background-color 0.3s, color 0.3s;
-            cursor: pointer;
-            
-        }
+        
         
       
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        
+       
         h1 {
             color: #000000;
             margin-bottom: 50px;
