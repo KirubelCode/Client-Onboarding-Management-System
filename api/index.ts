@@ -31,6 +31,8 @@ function establishUserDbConnection(userDbConfig) {
     return mysql.createConnection(userDbConfig);
 }
 
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
 // Route to render the login page
 app.get('/signup', (req, res) => {
     const SignUpPageHTML = `
