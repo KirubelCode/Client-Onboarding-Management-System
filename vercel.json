@@ -1,4 +1,4 @@
 {
 	"version": 2,
-	"rewrites": [{ "source": "/signup", "destination": "/" }]
+	"rewrites": [{ "source": "/signup", "destination": "/api" }]
 }
