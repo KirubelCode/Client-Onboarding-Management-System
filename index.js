@@ -18,54 +18,51 @@ app.use(session({
     saveUninitialized: false
 }));
 
-import { sql } from "@vercel/postgres";
+const { Pool } = require('pg');
+require('dotenv').config(); // Load environment variables from .env file
 
-// Function to execute SQL commands
-async function executeSqlCommands() {
-  try {
-    // Create a user
-    await sql`CREATE USER 'masterUser'@'localhost' IDENTIFIED BY 'SetuCarlow2024'`;
+// Database connection configuration
+const masterDbConfig = new masterDbConfig({
+    host: process.env.POSTGRES_HOST,
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DATABASE,
+    port: process.env.POSTGRES_PORT || 5432, // Default PostgreSQL port
+});
 
-    // Grant privileges to the new user
-    await sql`GRANT ALL PRIVILEGES ON *.* TO 'masterUser'@'localhost'`;
+async function setupDatabase() {
+    const client = await masterDbConfig.connect();
+    try {
+        // Create MasterDB database if it doesn't exist
+        await client.query(`CREATE DATABASE IF NOT EXISTS ${process.env.POSTGRES_DATABASE};`);
 
-    // Flush privileges to apply changes
-    await sql`FLUSH PRIVILEGES`;
+        // Use the specified database (MasterDB)
+        await client.query(`USE ${process.env.POSTGRES_DATABASE};`); // PostgreSQL doesn't use USE statement
 
-    // Create the master database if it doesn't exist
-    await sql`CREATE DATABASE IF NOT EXISTS MasterDB`;
+        // Create ClientData table if it doesn't exist
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS ClientData (
+                ID SERIAL PRIMARY KEY,
+                ClientUsername VARCHAR(255) NOT NULL,
+                ClientPassword VARCHAR(255) NOT NULL,
+                DatabaseName VARCHAR(255) NOT NULL,
+                GoogleClientId VARCHAR(255) NOT NULL,
+                GoogleClientSecret VARCHAR(255) NOT NULL,
+                RedirectUri VARCHAR(255) NOT NULL
+            );
+        `);
 
-    // Use the master database
-    await sql`USE MasterDB`;
-
-    // Create a table to store client information
-    await sql`
-      CREATE TABLE IF NOT EXISTS ClientData (
-        ID SERIAL PRIMARY KEY,
-        ClientUsername VARCHAR(255) NOT NULL,
-        ClientPassword VARCHAR(255) NOT NULL,
-        DatabaseName VARCHAR(255) NOT NULL,
-        GoogleClientId VARCHAR(255) NOT NULL,
-        GoogleClientSecret VARCHAR(255) NOT NULL,
-        RedirectUri VARCHAR(255) NOT NULL
-      )
-    `;
-    
-    console.log('SQL commands executed successfully');
-  } catch (error) {
-    console.error('Error executing SQL commands:', error);
-  }
+        console.log('Database setup completed successfully.');
+    } catch (error) {
+        console.error('Error setting up database:', error);
+    } finally {
+        client.release();
+        await masterDbConfig.end(); // Close the pool
+    }
 }
 
-// Call the function to execute SQL commands during initialization
-executeSqlCommands();
-
-const masterDbConfig = {
-    host: 'localhost',
-    user: 'masterUser',
-    password: 'SetuCarlow2024',
-    database: 'MasterDB'
-};
+// Execute setupDatabase function
+setupDatabase();
 
 
 // Function to establish a connection to the user's database
@@ -74,7 +71,8 @@ function establishUserDbConnection(userDbConfig) {
 }
 
 app.get("/", (req, res) => {
-    executeSqlCommands();
+    // Execute setupDatabase function
+setupDatabase();
     res.redirect("/signup"); // Redirect to the "/signup" route
 });
 
@@ -185,18 +183,15 @@ app.get('/signup', (req, res) => {
 app.post("/signup", async (req, res) => {
     const { username, dbname, clientId, clientSecret, redirectUri, password } = req.body;
 
-    // Database connection parameters for administrative tasks
-    const adminUsername = "masterUser";
-    const adminPassword = "SetuCarlow2024";
-    const adminDbname = "MasterDB";
-    const adminHost = "localhost";
+    
 
     // Create connection to perform administrative tasks
     const adminConn = mysql.createConnection({
-        host: adminHost,
-        user: adminUsername,
-        password: adminPassword,
-        database: adminDbname
+        host: process.env.POSTGRES_HOST,
+        user: process.env.POSTGRES_USER,
+        password: process.env.POSTGRES_PASSWORD,
+        database: process.env.POSTGRES_DATABASE,
+        port: process.env.POSTGRES_PORT || 5432, // Default PostgreSQL port
     });
 
     // Check connection for administrative tasks
