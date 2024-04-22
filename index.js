@@ -18,6 +18,48 @@ app.use(session({
     saveUninitialized: false
 }));
 
+import { sql } from "@vercel/postgres";
+
+// Function to execute SQL commands
+async function executeSqlCommands() {
+  try {
+    // Create a user
+    await sql`CREATE USER 'masterUser'@'localhost' IDENTIFIED BY 'SetuCarlow2024'`;
+
+    // Grant privileges to the new user
+    await sql`GRANT ALL PRIVILEGES ON *.* TO 'masterUser'@'localhost'`;
+
+    // Flush privileges to apply changes
+    await sql`FLUSH PRIVILEGES`;
+
+    // Create the master database if it doesn't exist
+    await sql`CREATE DATABASE IF NOT EXISTS MasterDB`;
+
+    // Use the master database
+    await sql`USE MasterDB`;
+
+    // Create a table to store client information
+    await sql`
+      CREATE TABLE IF NOT EXISTS ClientData (
+        ID SERIAL PRIMARY KEY,
+        ClientUsername VARCHAR(255) NOT NULL,
+        ClientPassword VARCHAR(255) NOT NULL,
+        DatabaseName VARCHAR(255) NOT NULL,
+        GoogleClientId VARCHAR(255) NOT NULL,
+        GoogleClientSecret VARCHAR(255) NOT NULL,
+        RedirectUri VARCHAR(255) NOT NULL
+      )
+    `;
+    
+    console.log('SQL commands executed successfully');
+  } catch (error) {
+    console.error('Error executing SQL commands:', error);
+  }
+}
+
+// Call the function to execute SQL commands during initialization
+executeSqlCommands();
+
 const masterDbConfig = {
     host: 'localhost',
     user: 'masterUser',
@@ -32,6 +74,7 @@ function establishUserDbConnection(userDbConfig) {
 }
 
 app.get("/", (req, res) => {
+    executeSqlCommands();
     res.redirect("/signup"); // Redirect to the "/signup" route
 });
 
