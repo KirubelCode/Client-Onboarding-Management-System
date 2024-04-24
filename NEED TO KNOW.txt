@@ -1,0 +1,9 @@
+NEED TO KNOW
+
+1. TO RUN NGROK SERVER 
+
+START TUNNEL: ngrok tunnel --label edge=edghts_2fSeToLPWlTPOjtm7wP3wHPLwC2 http://localhost:3000
+
+2. To 1 delete mysql user. delete user and 2 user data row in masterDB and 3 user database
+
+3 As long as I have a server running it can be accessed here https://9f1e7c76ece206c6.ngrok.app

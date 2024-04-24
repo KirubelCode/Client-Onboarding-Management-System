@@ -18,6 +18,12 @@ app.use(session({
     saveUninitialized: false
 }));
 
+//- Express (https://www.npmjs.com/package/express)
+//- Express Session (https://www.npmjs.com/package/express-session)
+//- MySQL (https://www.npmjs.com/package/mysql)
+//- Cors (https://www.npmjs.com/package/cors)
+//- Google APIs (https://www.npmjs.com/package/googleapis)
+
 const masterDbConfig = {
     host: 'localhost',
     user: 'masterUser',
@@ -370,6 +376,15 @@ app.post("/login", async (req, res) => {
                 if (results.length === 1) {
                     const userData = results[0];
 
+
+                    //Upon successful authentication, the user's data retrieved from the database is stored 
+                    //in the session for future use. If only one result is returned from the database query 
+                    //(`results.length === 1`), the user's data is extracted from the first result (`results[0]`). 
+                    //The user's database configuration is then extracted from this data and stored in the session as 
+                    //`req.session.userDbConfig`.
+
+                    //This code snippet handles user authentication and redirects the user to the dashboard upon successful login.
+
                     // Store user data and database config in session
                     req.session.userData = userData;
                     const userDbConfig = {
@@ -474,6 +489,9 @@ body {
 .btn:hover {
     background-color: #0056b3;
 }
+
+/*CSS-Tricks. (n.d.). Media Queries for Standard Devices. */
+/*CSS-Tricks. https://css-tricks.com/snippets/css/media-queries-for-standard-devices/ */
 
 /* Responsive adjustments for smaller screens (up to 600px) */
 @media (max-width: 600px) {
@@ -1180,6 +1198,8 @@ body {
     res.send(CheckPermissionPageHTML);
 });
 
+
+//https://developers.google.com/tasks/quickstart/nodejs
 app.get("/oauth2callback", async (req, res) => {
 
 const userData = req.session.userData;
@@ -1486,7 +1506,7 @@ app.get('/retrieved-client', (req, res) => {
                 const phone = document.getElementById('phone').value;
                 const address = document.getElementById('address').value;
         
-                // Send a POST request to addClient.php
+                // Send a POST request to addClient
                 const response = await fetch('/addClient', {
                     method: 'POST',
                     headers: {
@@ -2125,6 +2145,8 @@ app.get('/searchClientsPage', (req, res) => {
             </div>
             <div class="search-results" id="searchResults"></div>
             <script>
+            /*Mozilla Developer Network. (n.d.). XMLHttpRequest. MDN Web Docs. https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest */
+
                 function searchClients() {
                     const keyword = document.getElementById('searchInput').value.trim();
                    
