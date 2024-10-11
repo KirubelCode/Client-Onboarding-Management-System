@@ -1,3 +1,8 @@
+// Prepared by: Kirubel Temesgen
+// Purpose: This system allows businesses to create accounts, crud customer data securely, 
+// and utilize this information to enhance decision-making and pricing strategies.
+// Technologies used: NodeJs, Html, Css, MySQL, ExpressJs, GoogleApi, Ngrok(For cloud deployment)
+
 const express = require("express");
 const session = require('express-session');
 const mysql = require('mysql');
