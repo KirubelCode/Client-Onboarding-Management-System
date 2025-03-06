@@ -22,9 +22,6 @@ How to Run the Application -- Hosted www.
 Repository Structure
 Project2024/
 │── index.js            # Main backend logic
-│── routes/             # API routes
-│── models/             # Database models
-│── public/             # Frontend assets (if applicable)
 │── README.md           # Project documentation
 
 GDPR & Compliance
