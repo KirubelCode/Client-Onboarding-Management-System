@@ -1,5 +1,5 @@
 const express = require("express");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const path = require("path");
 const router = express.Router();
 
@@ -15,21 +15,8 @@ const masterDbConfig = {
 router.post("/signup", async (req, res) => {
     const { username, dbname, clientId, clientSecret, redirectUri, password } = req.body;
 
-    // Database connection parameters for administrative tasks
-    const adminUsername = "masterUser";
-    const adminPassword = "SetuCarlow2024";
-    const adminDbname = "MasterDB";
-    const adminHost = "localhost";
+    const adminConn = mysql.createConnection(masterDbConfig);
 
-    // Create connection to perform administrative tasks
-    const adminConn = mysql.createConnection({
-        host: adminHost,
-        user: adminUsername,
-        password: adminPassword,
-        database: adminDbname
-    });
-
-    // Check connection for administrative tasks
     adminConn.connect((err) => {
         if (err) {
             console.error('Error connecting to MasterDB:', err);
@@ -37,10 +24,8 @@ router.post("/signup", async (req, res) => {
             return;
         }
 
-        // Prepare SQL statement to check for existing client
         const checkExistingSql = `SELECT COUNT(*) AS count_exists FROM ClientData WHERE ClientUsername = ?`;
 
-        // Execute query to check if the client already exists
         adminConn.query(checkExistingSql, [username], (err, results) => {
             if (err) {
                 console.error('Error querying MasterDB:', err);
@@ -52,51 +37,54 @@ router.post("/signup", async (req, res) => {
 
             if (countExists > 0) {
                 res.status(400).json({ error: 'Client already exists in the database.' });
-            } else {
-                // Proceed with inserting the new record into ClientData table
-                const insertSql = `
-                    INSERT INTO ClientData (ClientUsername, DatabaseName, GoogleClientId, GoogleClientSecret, RedirectUri, ClientPassword)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                `;
+                return;
+            }
 
-                // Execute insert query
-                adminConn.query(insertSql, [username, dbname, clientId, clientSecret, redirectUri, password], (err, results) => {
+            const insertSql = `
+                INSERT INTO ClientData (ClientUsername, DatabaseName, GoogleClientId, GoogleClientSecret, RedirectUri, ClientPassword)
+                VALUES (?, ?, ?, ?, ?, ?)
+            `;
+
+            adminConn.query(insertSql, [username, dbname, clientId, clientSecret, redirectUri, password], (err) => {
+                if (err) {
+                    console.error('Error inserting client information:', err);
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    return;
+                }
+
+                const createDbSql = `CREATE DATABASE IF NOT EXISTS \`${dbname}\``;
+
+                adminConn.query(createDbSql, (err) => {
                     if (err) {
-                        console.error('Error inserting client information:', err);
+                        console.error('Error creating database:', err);
                         res.status(500).json({ error: 'Internal Server Error' });
                         return;
                     }
 
-                    // Client information inserted successfully
-                    const newDbname = dbname;
+                    const createUserSql = `CREATE USER IF NOT EXISTS '${username}'@'localhost' IDENTIFIED BY '${password}'`;
+                    const grantPrivilegesSql = `GRANT ALL PRIVILEGES ON \`${dbname}\`.* TO '${username}'@'localhost'`;
 
-                    // Create the client's database (ClientsDB)
-                    const createDbSql = `CREATE DATABASE IF NOT EXISTS ${newDbname}`;
-                    adminConn.query(createDbSql, (err, result) => {
+                    adminConn.query(createUserSql, (err) => {
                         if (err) {
-                            console.error('Error creating database:', err);
+                            console.error('Error creating user:', err);
                             res.status(500).json({ error: 'Internal Server Error' });
                             return;
                         }
 
-                        // Grant privileges to the new user on their database
-                        const grantPrivilegesSql = `GRANT ALL PRIVILEGES ON ${newDbname}.* TO '${username}'@'localhost' IDENTIFIED BY '${password}'`;
-                        adminConn.query(grantPrivilegesSql, (err, result) => {
+                        adminConn.query(grantPrivilegesSql, (err) => {
                             if (err) {
                                 console.error('Error granting privileges:', err);
                                 res.status(500).json({ error: 'Internal Server Error' });
                                 return;
                             }
 
-                            // Switch to the newly created database (ClientsDB)
-                            adminConn.changeUser({ database: newDbname }, (err) => {
+                            adminConn.changeUser({ database: dbname }, (err) => {
                                 if (err) {
                                     console.error('Error switching database:', err);
                                     res.status(500).json({ error: 'Internal Server Error' });
                                     return;
                                 }
 
-                                // Create clientInfo table in ClientsDB database
                                 const createTableSql = `
                                     CREATE TABLE IF NOT EXISTS clientInfo (
                                         ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -107,22 +95,21 @@ router.post("/signup", async (req, res) => {
                                         address VARCHAR(255)
                                     )
                                 `;
-                                adminConn.query(createTableSql, (err, result) => {
+
+                                adminConn.query(createTableSql, (err) => {
                                     if (err) {
                                         console.error('Error creating table:', err);
                                         res.status(500).json({ error: 'Internal Server Error' });
                                         return;
                                     }
 
-                                // On success: serve HTML file or redirect
-                                res.sendFile(path.join(__dirname, "../views/authorised-client.html"));
-
+                                    res.sendFile(path.join(__dirname, "../views/authorised-client.html"));
                                 });
                             });
                         });
                     });
                 });
-            }
+            });
         });
     });
 });

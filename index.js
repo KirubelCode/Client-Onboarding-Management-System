@@ -2,10 +2,11 @@
 // Purpose: This system allows businesses to create accounts, crud(create, retrieve, update and delete) 
 // customer data securely, and utilise this information to enhance decision-making and pricing strategies.
 // Technologies used: NodeJs, Html, Css, MySQL, ExpressJs, GoogleApi, Ngrok(For cloud deployment)
+require('dotenv').config();
 
 const express = require("express");
 const session = require('express-session');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
 const { google } = require('googleapis');
 const bodyParser = require("body-parser");
