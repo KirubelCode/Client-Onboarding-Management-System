@@ -1,94 +1,60 @@
- <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Check Permissions</title>
-        <style>
-              
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 2px outset #000000;
-    border-radius: 10px;
-    background-color: #ffffff;
-    text-align: center;
-    box-sizing: border-box;
-}
-
-.btn {
-    display: inline-block;
-    padding: 15px 30px;
-    font-size: 18px;
-    text-decoration: none;
-    border: 2px outset #000000;
-    border-radius: 5px;
-    color: #fff;
-    background-color: #007bff;
-    transition: background-color 0.3s, color 0.3s;
-    margin: 10px;
-    cursor: pointer;
-}
-
-.btn:hover {
-    background-color: #0056b3;
-}
-
-/* Responsive adjustments for smaller screens (up to 600px) */
-@media (max-width: 600px) {
-    .container {
-        padding: 15px; /* Increase padding for smaller screens */
-    }
-
-    .btn {
-        padding: 12px 24px; /* Adjust button padding */
-        font-size: 16px; /* Adjust button font size */
-    }
-}
-
-/* Responsive adjustments for even smaller screens (up to 400px) */
-@media (max-width: 400px) {
-    .container {
-        padding: 10px; /* Adjust padding for very small screens */
-    }
-
-    .btn {
-        padding: 10px 20px; /* Further adjust button padding */
-        font-size: 14px; /* Further reduce button font size */
-    }
-}    
-
-        .title {
-            font-size: 24px;
-            margin-bottom: 30px;
-            text-align: center; 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Permissions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        
-     
-        
-        
-      
-       
-        h1 {
-            color: #000000;
-            margin-bottom: 50px;
+
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            border: 2px outset #000000;
+            border-radius: 10px;
+            background-color: #ffffff;
+            text-align: center;
+            box-sizing: border-box;
         }
-        
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 18px;
+            text-decoration: none;
+            border: 2px outset #000000;
+            border-radius: 5px;
+            color: #fff;
+            background-color: #007bff;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .generated-link {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #000;
+            border: 1px solid #ddd;
+            padding: 10px;
+            word-break: break-word;
+        }
+
         .back-button {
             position: fixed;
-            bottom: 20px; 
+            bottom: 20px;
             left: 20px;
             padding: 10px 20px;
             font-size: 16px;
@@ -97,87 +63,57 @@ body {
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            
         }
-        
+
         .back-button:hover {
             background-color: #0056b3;
         }
-        
-        .generated-link {
-            margin-top: 20px; 
-            font-size: 16px; 
-            color: #000; 
-            border: 1px solid #ddd; 
-            padding: 10px; 
-            display: block; /*link is displayed as a block element */
-        }
-        
-        
-        .next-button {
-            display: block;
-            padding: 10px 20px;
-            font-size: 16px;
-            text-decoration: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            text-align: center;
-            border: 2px;
-            border-color: #000;
-              
-        
-        }
-        
-        .buttons {
-            display: flex;
-            justify-content: space-between;
-        }
-    
-        
-        
-        
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1 class="title">Checking Permissions</h1>
-            <div id="linkContainer" class="generated-link"></div>
-            <br><br>
-            <button onclick="copyLink()" class="btn">Copy Link</button>
-            <br><br>
-            <button onclick="goBack()" class="btn back-button">Back</button>
-        </div>
-    
-        <script>
-            // Retrieve the generated link from the URL parameter
-            const urlParams = new URLSearchParams(window.location.search);
-            const generatedLink = urlParams.get('link');
-    
-            // Insert line breaks into the generated link
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Checking Permissions</h1>
+        <div id="linkContainer" class="generated-link">Loading link...</div>
+        <button onclick="copyLink()" class="btn">Copy Link</button>
+        <button onclick="goNext()" class="btn">Next</button>
+        <button onclick="goBack()" class="back-button">Back</button>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const generatedLink = urlParams.get('link');
+        const linkContainer = document.getElementById('linkContainer');
+
+        if (generatedLink) {
             const wrappedLink = generatedLink.replace(/(.{50})/g, "$1<br>");
-    
-            // Set the wrapped link as the content of the linkContainer element
-            document.getElementById("linkContainer").innerHTML = wrappedLink;
-    
+            linkContainer.innerHTML = wrappedLink;
+        } else {
+            linkContainer.innerText = "No link provided.";
+        }
+
         function copyLink() {
-                navigator.clipboard.writeText(generatedLink)
-                    .then(() => {
-                        const confirmed = confirm("Link copied to clipboard.\n\nClick OK once you have given permissions.");
-                        if (confirmed) {
-                            window.location.href = '/retrieved-client';
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Error copying link:", error);
-                        alert("Failed to copy link to clipboard.");
-                    });
+            if (!generatedLink) {
+                alert("No link available to copy.");
+                return;
             }
 
-            // Function to navigate back
-            function goBack() {
-                window.history.back(); // Go back to the previous page
-            }
-        </script>
-    </body>
-    </html>
+            navigator.clipboard.writeText(generatedLink)
+                .then(() => {
+                    alert("Link copied to clipboard!");
+                })
+                .catch((err) => {
+                    console.error("Clipboard error:", err);
+                    alert("Failed to copy link. Please copy manually.");
+                });
+        }
+
+        function goNext() {
+            window.location.href = '/retrieved-client';
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
