@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Clients</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .results {
+      text-align: left;
+      margin-top: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      background: #fafafa;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .back {
+      background-color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Search Clients</h1>
+    <input id="searchInput" placeholder="Enter keyword..." />
+    <br />
+    <button onclick="search()">Search</button>
+    <button onclick="copy()">Copy All</button>
+    <button class="back" onclick="history.back()">Back</button>
+    <div id="results" class="results"></div>
+  </div>
+
+  <script>
+    function search() {
+      fetch('/searchClientAddress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keyword: document.getElementById('searchInput').value.trim() })
+      })
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('results').innerHTML = html;
+      });
+    }
+
+    function copy() {
+      const text = document.getElementById('results').innerText;
+      navigator.clipboard.writeText(text).then(() => alert("Copied"));
+    }
+  </script>
+</body>
+</html>

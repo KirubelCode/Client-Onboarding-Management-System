@@ -2,184 +2,131 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manage Clients</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 0;
+      font-family: Arial;
+      background: #f5f5f5;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      margin: 0;
     }
 
     .container {
-      background-color: #fff;
+      background: #fff;
       padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
       width: 90%;
       max-width: 600px;
-      box-sizing: border-box;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 20px;
-      color: #333;
     }
 
     label {
-      font-weight: 500;
-      margin-bottom: 5px;
       display: block;
+      margin: 15px 0 5px;
     }
 
-    select, input[type="text"] {
+    input, select {
       width: 100%;
       padding: 10px;
-      font-size: 16px;
       margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
     }
 
-    .button-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 10px;
-    }
-
-    .button-container button {
-      flex: 1 1 45%;
-      padding: 12px;
-      font-size: 16px;
+    button {
+      padding: 10px 20px;
+      margin-right: 10px;
+      background: #007bff;
+      color: #fff;
       border: none;
-      border-radius: 8px;
-      background-color: #007bff;
-      color: white;
+      border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
 
-    .button-container button:hover {
-      background-color: #0056b3;
-    }
-
-    .back-button {
-      margin-top: 20px;
-      background-color: #6c757d;
-    }
-
-    .back-button:hover {
-      background-color: #5a6268;
-    }
-
-    @media (max-width: 500px) {
-      .button-container button {
-        flex: 1 1 100%;
-      }
+    .back {
+      background: #6c757d;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Manage Clients</h1>
-    <label for="clientSelect">Select Client:</label>
     <select id="clientSelect" onchange="selectClient()">
       <option value="">Select a client</option>
-      ${clientOptions}
+      <!-- Insert ${clientOptions} here from server -->
     </select>
 
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" readonly>
+    <label>First Name</label><input id="firstName" readonly>
+    <label>Last Name</label><input id="lastName" readonly>
+    <label>Email</label><input id="email" readonly>
+    <label>Phone</label><input id="phone" readonly>
+    <label>Address</label><input id="address" readonly>
 
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" readonly>
-
-    <label for="email">Email:</label>
-    <input type="text" id="email" readonly>
-
-    <label for="phone">Phone:</label>
-    <input type="text" id="phone" readonly>
-
-    <label for="address">Address:</label>
-    <input type="text" id="address" readonly>
-
-    <div class="button-container">
+    <div>
       <button onclick="editClient()">Edit</button>
       <button onclick="updateClient()">Update</button>
       <button onclick="deleteClient()">Delete</button>
-      <button onclick="goBack()" class="back-button">Back</button>
     </div>
   </div>
 
+  <button class="back" onclick="history.back()">Back</button>
+
   <script>
-    const clientDetails = ${JSON.stringify(clientDetails)};
+    const clientDetails = {}; // Replace with ${JSON.stringify(clientDetails)}
 
     function selectClient() {
-      const id = document.getElementById('clientSelect').value;
-      if (id && clientDetails[id]) {
-        const { firstName, lastName, email, phone, address } = clientDetails[id];
-        document.getElementById('firstName').value = firstName;
-        document.getElementById('lastName').value = lastName;
-        document.getElementById('email').value = email;
-        document.getElementById('phone').value = phone;
-        document.getElementById('address').value = address;
-      } else {
-        document.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
-      }
+      const id = clientSelect.value;
+      const c = clientDetails[id] || {};
+      firstName.value = c.firstName || '';
+      lastName.value = c.lastName || '';
+      email.value = c.email || '';
+      phone.value = c.phone || '';
+      address.value = c.address || '';
     }
 
     function editClient() {
-      document.querySelectorAll('input[type="text"]').forEach(i => i.removeAttribute('readonly'));
+      document.querySelectorAll("input").forEach(i => i.removeAttribute("readonly"));
     }
 
     function updateClient() {
-      const clientId = document.getElementById('clientSelect').value;
-      if (!clientId) return alert('Select a client first');
-
-      const updated = {
-        clientId,
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        address: document.getElementById('address').value
-      };
-
+      const id = clientSelect.value;
       fetch('/updateClient', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updated)
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          clientId: id,
+          firstName: firstName.value,
+          lastName: lastName.value,
+          email: email.value,
+          phone: phone.value,
+          address: address.value
+        })
       }).then(res => {
-        if (res.ok) alert('Client updated');
-        else alert('Failed to update client');
-      }).catch(() => alert('Error updating client'));
+        if (res.ok) alert('Updated');
+        else alert('Failed');
+      });
     }
 
     function deleteClient() {
-      const clientId = document.getElementById('clientSelect').value;
-      if (!clientId) return alert('Select a client to delete');
-      if (!confirm('Are you sure you want to delete this client?')) return;
-
+      const id = clientSelect.value;
+      if (!confirm("Delete client?")) return;
       fetch('/deleteClient', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientId })
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ clientId: id })
       }).then(res => {
-        if (res.ok) alert('Client deleted');
-        else alert('Failed to delete client');
-      }).catch(() => alert('Error deleting client'));
-    }
-
-    function goBack() {
-      window.history.back();
+        if (res.ok) alert('Deleted');
+        else alert('Failed');
+      });
     }
   </script>
 </body>
