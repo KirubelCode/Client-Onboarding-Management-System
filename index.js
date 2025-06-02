@@ -25,6 +25,7 @@ const clientRoutes = require("./routes/client");
 
 const app = express();
 
+
 app.use(express.urlencoded({ extended: true }));
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -626,5 +627,5 @@ app.post('/searchClientAddress', (req, res) => {
     });
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 app.listen(port, () => console.log(`Server ready on port ${port}.`));
