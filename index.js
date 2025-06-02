@@ -626,6 +626,17 @@ app.post('/searchClientAddress', (req, res) => {
     });
 });
 
+app.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Logout error:', err);
+            return res.status(500).send('Could not log out');
+        }
+        res.redirect('/login');
+    });
+});
+
+
 app.listen(3000, '0.0.0.0', () => {
   console.log('Server ready on port 3000');
 });
