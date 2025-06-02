@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f5f5f5;
+                overflow: auto; /* Enable page scrolling */
+            }
+    
+            .container {
+                max-width: 600px;
+                width: 80%; /* Adjust container width for larger screens */
+                margin: 10% auto;
+                padding: 20px;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                overflow: hidden; /* Hide overflow content */
+            }
+    
+            h1 {
+                text-align: center;
+                color: #333;
+                margin-bottom: 20px;
+            }
+    
+            input[type="text"],
+            input[type="password"],
+            button {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+                font-size: 16px;
+            }
+    
+            button {
+                background-color: #007bff;
+                color: #fff;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+    
+            button:hover {
+                background-color: #0056b3;
+            }
+    
+            .note {
+                background-color: #f8d7da;
+                color: #721c24;
+                padding: 10px;
+                border-radius: 5px;
+                margin-top: 20px;
+                white-space: pre-line; /* Allow line breaks in notes */
+                overflow: auto; /* Enable overflow scrolling for notes */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Sign Up</h1>
+            <form action="/signup" method="post">
+                <input type="text" placeholder="Enter your username" name="username" required>
+                <input type="password" placeholder="Enter your password" name="password" required>
+                <input type="text" placeholder="Enter your database name" name="dbname" required>
+                <input type="text" placeholder="Enter your Google Client ID" name="clientId" required>
+                <input type="text" placeholder="Enter your Google Client Secret" name="clientSecret" required>
+                <input type="text" placeholder="Enter your Google Redirect URI" name="redirectUri" required>
+                <button type="submit">Sign Up</button>
+                
+            </form>
+            <button onclick="location.href='/login'">Login</button>
+            <div class="note">
+                <p><strong>Note:</strong> Before signing up, please set up your Google Console(gmail) account (create credentials) with a oAuth Client <BR><br>  1. Retrieve Client secret and Client Id <br><br> 2. Add the following scopes:</p>
+                <ul>
+                    <li>'https://www.googleapis.com/auth/user.addresses.read'</li>
+                    <li>'https://www.googleapis.com/auth/user.phonenumbers.read'</li>
+                    <li>'https://www.googleapis.com/auth/userinfo.email'</li>
+                    <li>'profile' (Include the profile scope and people api)</li>
+                </ul>
+                <p> Use this redirect URI https://9f1e7c76ece206c6.ngrok.app/oauth2callback in your google account and here.<p>
+                <p>Also, configure the google console Redirect URI to match the one used in this signup page.</p>
+            </div>
+        </div>
+    </body>
+    </html>
