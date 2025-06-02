@@ -66,13 +66,13 @@ function establishUserDbConnection(userDbConfig) {
 app.get('/signup', (req, res) => {
     
     // Send the signup page HTML as the response
-    res.sendFile(path.join(__dirname, '../views/signup.html'));
+    res.sendFile(path.join(__dirname, 'views/signup.html'));
 });
 
 // Route to render the login page
 app.get('/login', (req, res) => {
     // Send the login page HTML as the response
-    res.sendFile(path.join(__dirname, '../views/login.html'));
+    res.sendFile(path.join(__dirname, 'views/login.html'));
 });
 
 
