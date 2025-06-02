@@ -1,158 +1,133 @@
 <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Retrieve Details</title>
-            <style>
-                   
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Retrieve Details</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 2px outset #000000;
-    border-radius: 10px;
-    background-color: #ffffff;
-    text-align: center;
-    box-sizing: border-box;
-}
+    .wrapper {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
 
-.btn {
-    display: inline-block;
-    padding: 15px 30px;
-    font-size: 18px;
-    text-decoration: none;
-    border: 2px outset #000000;
-    border-radius: 5px;
-    color: #fff;
-    background-color: #007bff;
-    transition: background-color 0.3s, color 0.3s;
-    margin: 10px;
-    cursor: pointer;
-}
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+      font-weight: 500;
+    }
 
-.btn:hover {
-    background-color: #0056b3;
-}
+    .checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
 
-/* Responsive adjustments for smaller screens (up to 600px) */
-@media (max-width: 600px) {
-    .container {
-        padding: 15px; /* Increase padding for smaller screens */
+    label {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      color: #444;
+    }
+
+    input[type="radio"] {
+      margin-right: 10px;
+      accent-color: #007bff;
     }
 
     .btn {
-        padding: 12px 24px; /* Adjust button padding */
-        font-size: 16px; /* Adjust button font size */
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
     }
-}
 
-/* Responsive adjustments for even smaller screens (up to 400px) */
-@media (max-width: 400px) {
-    .container {
-        padding: 10px; /* Adjust padding for very small screens */
+    .btn:hover {
+      background-color: #0056b3;
     }
 
-    .btn {
-        padding: 10px 20px; /* Further adjust button padding */
-        font-size: 14px; /* Further reduce button font size */
+    .back-button {
+      margin-top: 30px;
+      background-color: #6c757d;
     }
-}    
-        
-            .title {
-                font-size: 24px;
-                margin-bottom: 30px;
-                text-align: center; 
-            }
-            
-            .form {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start; /* Left align form items */
-            }
-            
-            .checkboxes {
-                margin-bottom: 20px;
-            }
-            
-            .checkbox-item {
-                margin-bottom: 10px;
-            }
-            
-            
 
-            .back-button {
-                position: fixed;
-                bottom: 20px; 
-                left: 20px;
-                padding: 10px 20px;
-                font-size: 16px;
-                background-color: #007bff;
-                color: #fff;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                
-            }
-            
-            .back-button:hover {
-                background-color: #0056b3;
-            }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1 class="title">Retrieve Details</h1>
-                <form class="form">
-                    <fieldset class="form-fieldset use-social">
-                        <legend>Select Application</legend>
-                        <div class="checkboxes">
-                            <label class="checkbox-item">
-                                <input type="radio" name="platform" value="Google"> Google
-                            </label>
-                        </div>
-                    </fieldset>
-                    <button type="button" class="btn" onclick="generateLink()">Generate Link</button>
-                </form>
-                <button onclick="goBack()" class="back-button">Back</button>
-            </div>
-        <script>
-            function goBack() {
-                window.history.back();
-            }
+    .back-button:hover {
+      background-color: #5a6268;
+    }
 
-            async function generateLink() {
-                const selectedPlatform = document.querySelector('input[name="platform"]:checked');
-                if (!selectedPlatform) {
-                    alert('Please select a platform.');
-                    return;
-                }
+    @media (max-width: 500px) {
+      .wrapper {
+        padding: 20px;
+      }
 
-                try {
-                    const res = await fetch('/generate-oauth-link');
-                    const data = await res.json();
+      .btn {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h2>Retrieve Details</h2>
+    <form>
+      <div class="checkboxes">
+        <label><input type="radio" name="platform" value="Google"> Google</label>
+      </div>
+      <button type="button" class="btn" onclick="generateLink()">Generate Link</button>
+      <button type="button" class="btn back-button" onclick="goBack()">Back</button>
+    </form>
+  </div>
 
-                    if (data.link) {
-                        window.location.href = '/check-permission?link=' + encodeURIComponent(data.link);
-                    } else {
-                        alert('Could not generate link');
-                    }
-                } catch (err) {
-                    console.error(err);
-                    alert('Error generating link');
-                }
-            }
-        </script>
-        </body>
-        </html>
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+
+    async function generateLink() {
+      const selectedPlatform = document.querySelector('input[name="platform"]:checked');
+      if (!selectedPlatform) {
+        alert('Please select a platform.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/generate-oauth-link');
+        const data = await res.json();
+
+        if (data.link) {
+          window.location.href = '/check-permission?link=' + encodeURIComponent(data.link);
+        } else {
+          alert('Could not generate link');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error generating link');
+      }
+    }
+  </script>
+</body>
+</html>
