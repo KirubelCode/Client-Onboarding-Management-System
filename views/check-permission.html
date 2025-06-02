@@ -160,24 +160,20 @@ body {
             // Set the wrapped link as the content of the linkContainer element
             document.getElementById("linkContainer").innerHTML = wrappedLink;
     
-            // Function to copy the generated link to the clipboard
-            function copyLink() {
-                const linkToCopy = generatedLink;
-    
-                // Copy the link to the clipboard
-                navigator.clipboard.writeText(linkToCopy)
+        function copyLink() {
+                navigator.clipboard.writeText(generatedLink)
                     .then(() => {
-                        alert("Link copied to clipboard: " + linkToCopy);
+                        const confirmed = confirm("Link copied to clipboard.\n\nClick OK once you have given permissions.");
+                        if (confirmed) {
+                            window.location.href = '/retrieved-client';
+                        }
                     })
                     .catch((error) => {
-                        console.error("Error copying link to clipboard:", error);
-                        alert("Failed to copy link to clipboard. Please try again.");
+                        console.error("Error copying link:", error);
+                        alert("Failed to copy link to clipboard.");
                     });
-    
-                // Redirect to 
-                window.location.href = '/retrieved-client';
             }
-    
+
             // Function to navigate back
             function goBack() {
                 window.history.back(); // Go back to the previous page
