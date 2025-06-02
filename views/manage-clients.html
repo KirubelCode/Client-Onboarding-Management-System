@@ -2,64 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Manage Clients</title>
   <style>
     body {
-      font-family: Arial;
-      background: #f5f5f5;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
     }
 
-    .container {
+    .wrapper {
       background: #fff;
       padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
       width: 90%;
       max-width: 600px;
     }
 
-    h1 {
+    h2 {
       text-align: center;
+      color: #333;
+      margin-bottom: 20px;
     }
 
     label {
       display: block;
-      margin: 15px 0 5px;
+      margin-top: 15px;
+      font-weight: 500;
     }
 
     input, select {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 5px;
     }
 
-    button {
-      padding: 10px 20px;
-      margin-right: 10px;
-      background: #007bff;
-      color: #fff;
+    .btn {
+      padding: 12px 20px;
+      margin: 15px 10px 0 0;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
     }
 
     .back {
-      background: #6c757d;
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
+      background-color: #6c757d;
+      margin-top: 25px;
+    }
+
+    @media (max-width: 500px) {
+      .btn {
+        font-size: 14px;
+        padding: 10px 16px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Manage Clients</h1>
+  <div class="wrapper">
+    <h2>Manage Clients</h2>
     <select id="clientSelect" onchange="selectClient()">
       <option value="">Select a client</option>
       <!-- Insert ${clientOptions} here from server -->
@@ -72,13 +88,13 @@
     <label>Address</label><input id="address" readonly>
 
     <div>
-      <button onclick="editClient()">Edit</button>
-      <button onclick="updateClient()">Update</button>
-      <button onclick="deleteClient()">Delete</button>
+      <button class="btn" onclick="editClient()">Edit</button>
+      <button class="btn" onclick="updateClient()">Update</button>
+      <button class="btn" onclick="deleteClient()">Delete</button>
     </div>
-  </div>
 
-  <button class="back" onclick="history.back()">Back</button>
+    <button class="btn back" onclick="history.back()">Back</button>
+  </div>
 
   <script>
     const clientDetails = {}; // Replace with ${JSON.stringify(clientDetails)}
