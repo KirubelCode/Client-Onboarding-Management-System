@@ -627,13 +627,13 @@ app.post('/searchClientAddress', (req, res) => {
 });
 
 app.post('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            console.error('Logout error:', err);
-            return res.status(500).send('Could not log out');
-        }
-        res.redirect('/login');
-    });
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Logout failed:', err);
+      return res.status(500).send('Logout error');
+    }
+    res.sendFile(path.join(__dirname, 'views/logout.html'));
+  });
 });
 
 
