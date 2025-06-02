@@ -22,6 +22,8 @@ const oauthRoutes = require("./routes/oauth-callback");
 const authorisedClientRoute = require("./routes/authorised-client");
 const retrievedClientRoute = require("./routes/retrieved-client");
 const clientRoutes = require("./routes/client");
+const logoutRoutes = require('./routes/logout');
+
 
 
 const app = express();
@@ -101,6 +103,7 @@ app.use("/", retrievedClientRoute);
 
 app.use("/", clientRoutes);
 
+app.use('/', logoutRoutes);
 
 // Route handler to serve the client management page
 app.get("/manage-clients", async (req, res) => {
@@ -624,16 +627,6 @@ app.post('/searchClientAddress', (req, res) => {
             
         });
     });
-});
-
-app.post('/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      console.error('Logout failed:', err);
-      return res.status(500).send('Logout error');
-    }
-    res.sendFile(path.join(__dirname, 'views/logout.html'));
-  });
 });
 
 
