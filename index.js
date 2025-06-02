@@ -44,10 +44,10 @@ app.use(session({
 //- Google APIs (https://www.npmjs.com/package/googleapis)
 
 const masterDbConfig = {
-    host: 'localhost',
-    user: 'masterUser',
-    password: 'SetuCarlow2024',
-    database: 'MasterDB'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME
 };
 
 // Route handler for the root endpoint
