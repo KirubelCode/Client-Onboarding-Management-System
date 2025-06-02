@@ -101,17 +101,6 @@ app.use("/", retrievedClientRoute);
 
 app.use("/", clientRoutes);
 
-app.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            console.error('Logout error:', err);
-            return res.status(500).send('Could not log out');
-        }
-        res.redirect('/login');
-    });
-});
-
-
 
 // Route handler to serve the client management page
 app.get("/manage-clients", async (req, res) => {
