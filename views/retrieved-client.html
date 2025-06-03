@@ -37,7 +37,7 @@
       text-align: left;
       margin-bottom: 25px;
       padding: 10px;
-      padding-right: 20%;
+      padding-right: 10%;
       /* Add spacing inside the border */
     }
 
@@ -151,6 +151,11 @@
 
     <button class="btn" onclick="addClient()">Add Client</button>
     <a href="/dashboard" class="btn">Main Menu</a>
+
+    <div class="disclaimer">
+      <p>This page reloads automatically every 30 seconds.<br>
+        You can also reload manually to retrieve new client information.</p>
+    </div>
   </div>
   <button onclick="goBack()" class="back-button">Back</button>
   <script>
@@ -204,10 +209,7 @@
     setInterval(() => location.reload(), 30000);
   </script>
 
-  <div class="disclaimer">
-    <p>This page reloads automatically every 30 seconds.<br>
-      You can also reload manually to retrieve new client information.</p>
-  </div>
+
 
 </body>
 
