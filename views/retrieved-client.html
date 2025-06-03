@@ -129,49 +129,53 @@
   </div>
   <button onclick="goBack()" class="back-button">Back</button>
 
-  <script>
-    async function populateClientData() {
-      try {
-        const res = await fetch('/getClientData');
-        const data = await res.json();
+<script>
+  async function populateClientData() {
+    try {
+      const res = await fetch('/getClientData');
+      const data = await res.json();
 
+      const hasData = data.firstName || data.lastName || data.email || data.phone || data.address;
+
+      if (hasData) {
         document.getElementById('firstName').value = data.firstName || '';
         document.getElementById('lastName').value = data.lastName || '';
         document.getElementById('email').value = data.email || '';
         document.getElementById('phone').value = data.phone || '';
         document.getElementById('address').value = data.address || '';
-      } catch (err) {
-        console.error('Error fetching client data:', err);
+      } else {
+        setTimeout(populateClientData, 5000); // Retry in 5 seconds if data missing
       }
+    } catch (err) {
+      console.error('Error fetching client data:', err);
+      setTimeout(populateClientData, 5000); // Retry on failure
     }
+  }
 
-    async function addClient() {
-      await populateClientData();
-      const payload = {
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        address: document.getElementById('address').value
-      };
+  async function addClient() {
+    const payload = {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      address: document.getElementById('address').value
+    };
 
-      const res = await fetch('/addClient', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+    const res = await fetch('/addClient', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
-      if (res.ok) alert('Client inserted successfully!');
-      else alert('Error inserting client');
-    }
+    alert(res.ok ? 'Client inserted successfully!' : 'Error inserting client');
+  }
 
-    function goBack() {
-      window.history.back();
-    }
+  function goBack() {
+    window.history.back();
+  }
 
-    populateClientData();
-    console.log("Fetched client data:", data);
+  populateClientData(); // Only populate, no clearing
+</script>
 
-  </script>
 </body>
 </html>

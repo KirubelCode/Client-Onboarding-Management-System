@@ -79,6 +79,17 @@ app.get('/login', (req, res) => {
 });
 
 
+app.use((req, res, next) => {
+  const openRoutes = ['/login', '/signup', '/logout'];
+  const isLoggedIn = req.session && req.session.userData;
+
+  if (!isLoggedIn && !openRoutes.includes(req.path)) {
+    return res.redirect('/login');
+  }
+
+  next();
+});
+
 app.use("/", authRoutes);
 
 
