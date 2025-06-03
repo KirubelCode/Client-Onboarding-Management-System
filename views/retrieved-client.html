@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Retrieved Client</title>
   <style>
     body {
@@ -101,12 +102,29 @@
       h1 {
         font-size: 20px;
       }
+
+      .disclaimer {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        font-size: 13px;
+        color: #666;
+        background: #ffffffc2;
+        padding: 8px 12px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 999;
+        max-width: 300px;
+        text-align: center;
+      }
+
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Retrieved Client (Reload if not shown)</h1>
+    <h1>Retrieved Client </h1>
     <div id="clientDetails" class="client-details">
       <label for="firstName">First Name:</label>
       <input type="text" id="firstName" readonly />
@@ -128,54 +146,62 @@
     <a href="/dashboard" class="btn">Main Menu</a>
   </div>
   <button onclick="goBack()" class="back-button">Back</button>
+  <script>
+    async function populateClientData() {
+      try {
+        const res = await fetch('/getClientData');
+        const data = await res.json();
 
-<script>
-  async function populateClientData() {
-    try {
-      const res = await fetch('/getClientData');
-      const data = await res.json();
+        const hasData = data.firstName || data.lastName || data.email || data.phone || data.address;
 
-      const hasData = data.firstName || data.lastName || data.email || data.phone || data.address;
-
-      if (hasData) {
-        document.getElementById('firstName').value = data.firstName || '';
-        document.getElementById('lastName').value = data.lastName || '';
-        document.getElementById('email').value = data.email || '';
-        document.getElementById('phone').value = data.phone || '';
-        document.getElementById('address').value = data.address || '';
-      } else {
-        setTimeout(populateClientData, 5000); // Retry in 5 seconds if data missing
+        if (hasData) {
+          document.getElementById('firstName').value = data.firstName || '';
+          document.getElementById('lastName').value = data.lastName || '';
+          document.getElementById('email').value = data.email || '';
+          document.getElementById('phone').value = data.phone || '';
+          document.getElementById('address').value = data.address || '';
+        } else {
+          setTimeout(populateClientData, 5000); // Retry in 5 seconds if data missing
+        }
+      } catch (err) {
+        console.error('Error fetching client data:', err);
+        setTimeout(populateClientData, 5000); // Retry on failure
       }
-    } catch (err) {
-      console.error('Error fetching client data:', err);
-      setTimeout(populateClientData, 5000); // Retry on failure
     }
-  }
 
-  async function addClient() {
-    const payload = {
-      firstName: document.getElementById('firstName').value,
-      lastName: document.getElementById('lastName').value,
-      email: document.getElementById('email').value,
-      phone: document.getElementById('phone').value,
-      address: document.getElementById('address').value
-    };
+    async function addClient() {
+      const payload = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value
+      };
 
-    const res = await fetch('/addClient', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+      const res = await fetch('/addClient', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-    alert(res.ok ? 'Client inserted successfully!' : 'Error inserting client');
-  }
+      alert(res.ok ? 'Client inserted successfully!' : 'Error inserting client');
+    }
 
-  function goBack() {
-    window.history.back();
-  }
+    function goBack() {
+      window.history.back();
+    }
 
-  populateClientData(); // Only populate, no clearing
-</script>
+    populateClientData();
+
+    // 🔁 Auto-reload the page every 30 seconds
+    setInterval(() => location.reload(), 30000);
+  </script>
+
+  <div class="disclaimer">
+    <p>This page reloads automatically every 30 seconds.<br>
+      You can also reload manually to retrieve new client information.</p>
+  </div>
 
 </body>
+
 </html>
