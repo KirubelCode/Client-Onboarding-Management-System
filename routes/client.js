@@ -4,7 +4,6 @@ const fs = require("fs");
 const mysql = require("mysql2");
 const router = express.Router();
 
-let clientData = {}; // In-memory temporary store
 
 // Replace this with your utility import if needed
 function establishUserDbConnection(config) {
@@ -77,6 +76,8 @@ router.get('/getClientData', (req, res) => {
   const data = req.session.clientData;
   if (!data) return res.status(404).json({ error: 'No client data found' });
   res.json(data);
+  console.log("Sending client data:", clientData);
+
 });
 
 
