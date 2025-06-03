@@ -73,10 +73,12 @@ router.post("/setClientData", (req, res) => {
     res.json({ message: "Client data updated successfully" });
 });
 
-// Retrieves client data
-router.get("/getClientData", (req, res) => {
-    res.json(clientData);
+router.get('/getClientData', (req, res) => {
+  const data = req.session.clientData;
+  if (!data) return res.status(404).json({ error: 'No client data found' });
+  res.json(data);
 });
+
 
 // Update client
 router.post("/updateclient", (req, res) => {
