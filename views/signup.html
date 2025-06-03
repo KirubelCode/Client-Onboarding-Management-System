@@ -72,22 +72,30 @@
                 <input type="text" placeholder="Enter your database name" name="dbname" required>
                 <input type="text" placeholder="Enter your Google Client ID" name="clientId" required>
                 <input type="text" placeholder="Enter your Google Client Secret" name="clientSecret" required>
-                <input type="text" placeholder="Enter your Google Redirect URI" name="redirectUri" required>
+                <input type="hidden" name="redirectUri" value="https://client-management.online/oauth2callback">
                 <button type="submit">Sign Up</button>
                 
             </form>
             <button onclick="location.href='/login'">Login</button>
-            <div class="note">
-                <p><strong>Note:</strong> Before signing up, please set up your Google Console(gmail) account (create credentials) with a oAuth Client <BR><br>  1. Retrieve Client secret and Client Id <br><br> 2. Add the following scopes:</p>
+           <div class="note">
+            <p><strong>Note:</strong><br><br>
+            To use Google account integration, please configure your Google Console (https://console.cloud.google.com) with the following:</p>
+            
+            <ol>
+                <li>Create an OAuth Client ID under Credentials</li>
+                <li>Set the following scopes:</li>
                 <ul>
-                    <li>'https://www.googleapis.com/auth/user.addresses.read'</li>
-                    <li>'https://www.googleapis.com/auth/user.phonenumbers.read'</li>
-                    <li>'https://www.googleapis.com/auth/userinfo.email'</li>
-                    <li>'profile' (Include the profile scope and people api)</li>
+                    <li><code>https://www.googleapis.com/auth/user.addresses.read</code></li>
+                    <li><code>https://www.googleapis.com/auth/user.phonenumbers.read</code></li>
+                    <li><code>https://www.googleapis.com/auth/userinfo.email</code></li>
+                    <li><code>profile</code></li>
                 </ul>
-                <p> Use this redirect URI https://9f1e7c76ece206c6.ngrok.app/oauth2callback in your google account and here.<p>
-                <p>Also, configure the google console Redirect URI to match the one used in this signup page.</p>
-            </div>
+                <li>Use this fixed redirect URI: <br><code>https://client-management.online/oauth2callback</code></li>
+            </ol>
+
+            <p>You do not need to enter the redirect URI here — it is already set by the application.</p>
+        </div>
+
         </div>
     </body>
     </html>

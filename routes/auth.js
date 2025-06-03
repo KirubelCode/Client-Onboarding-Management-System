@@ -14,7 +14,9 @@ const masterDbConfig = {
 
 // Route for handling signup requests
 router.post("/signup", async (req, res) => {
-    const { username, dbname, clientId, clientSecret, redirectUri, password } = req.body;
+    const { username, dbname, clientId, clientSecret, password } = req.body;
+    const redirectUri = "https://client-management.online/oauth2callback";
+
 
     const adminConn = mysql.createConnection(masterDbConfig);
 
