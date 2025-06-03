@@ -106,8 +106,7 @@ app.use("/", clientRoutes);
 app.use('/', logoutRoutes);
 
 
-app.listen(3000, '0.0.0.0', () => {
-  console.log('Server ready on port 3000');
+app.listen(3000, '127.0.0.1', () => {
+  console.log('App running');
 });
-
 
