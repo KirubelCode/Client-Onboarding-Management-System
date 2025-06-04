@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ - About This App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 700px;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #007bff;
+      text-align: center;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 15px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    code {
+      background-color: #f1f1f1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 90%;
+    }
+
+    .btn-back {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 18px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-back:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📘 FAQ / About This App</h2>
+    <ul>
+      <li>This is a live **demo version** of a business client management web application.</li>
+      <li>It is currently deployed and functioning, but not production-ready yet.</li>
+      <li>You can test all features using this test account:<br><strong>Username:</strong> <code>TestClient</code><br><strong>Password:</strong> <code>TestClient</code></li>
+      <li>
+        <strong>Google Integration:</strong><br>
+        To enable automated client info retrieval, connect a Google API (People API) using your own Google OAuth credentials. You’ll need:
+        <ul>
+          <li>Your Google Client ID and Secret</li>
+          <li>The following scopes:
+            <ul>
+              <li><code>https://www.googleapis.com/auth/user.addresses.read</code></li>
+              <li><code>https://www.googleapis.com/auth/user.phonenumbers.read</code></li>
+              <li><code>https://www.googleapis.com/auth/userinfo.email</code></li>
+              <li><code>profile</code></li>
+            </ul>
+          </li>
+          <li>Set redirect URI in Google console to: <code>https://client-management.online/oauth2callback</code></li>
+        </ul>
+      </li>
+      <li>
+        <strong>How Permissions Work:</strong><br>
+        You’ll generate a link (from the "Check Permissions" page) and send it to a client. <br> When they click the link and grant access via their Google account, <br> their info (name, email, phone, address) is auto-filled into the system. This allows **quick onboarding even while the client is remote or on-the-go**.
+      </li>
+    </ul>
+
+    <a href="/dashboard" class="btn-back"> Back to Dashboard</a>
+  </div>
+</body>
+</html>
