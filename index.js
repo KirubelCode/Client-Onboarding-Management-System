@@ -23,6 +23,7 @@ const authorisedClientRoute = require("./routes/authorised-client");
 const retrievedClientRoute = require("./routes/retrieved-client");
 const clientRoutes = require("./routes/client");
 const logoutRoutes = require('./routes/logout');
+const faqRoutes = require("./routes/faq"); 
 
 
 
@@ -93,6 +94,7 @@ app.use((req, res, next) => {
 app.use("/", authRoutes);
 
 
+app.use("/", faqRoutes);
 
 app.use("/", dashboardRoutes);
 
